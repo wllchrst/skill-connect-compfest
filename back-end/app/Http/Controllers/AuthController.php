@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class LoginController extends Controller
+class AuthController extends Controller
 {
     public function login(Request $request) {
         $email = $request->input('email');
@@ -16,6 +16,10 @@ class LoginController extends Controller
             ], 400);
         }
 
-        
+
+    }
+
+    public function register(Request $request) {
+
     }
 }
