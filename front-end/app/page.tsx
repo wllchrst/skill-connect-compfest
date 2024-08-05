@@ -1,5 +1,6 @@
-import { Button } from "./components/buttons/button";
 
 export default function Home() {
-  return <>Janice Cnatik</>
+  return <div className="p-5">
+    <button className="p-2 rounded-md bg-orange-100 border-solid">Click</button>
+  </div>
 }
