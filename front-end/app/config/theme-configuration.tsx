@@ -1,15 +1,15 @@
 import { ITheme } from "../interfaces/theme-context.interface";
 
 const darkTheme: ITheme = {
-    backgroundColor: "#794A3A",
+    backgroundColor: "bg-dark-background",
     primary: "blue",
-    textColor: "white"
+    textColor: "text-dark-text"
 }
 
 const lightTheme: ITheme = {
-    backgroundColor: "F6DCAC",
+    backgroundColor: "bg-light-background",
     primary: "blue",
-    textColor: "black"
+    textColor: "text-light-text"
 }
 
 export { darkTheme, lightTheme }

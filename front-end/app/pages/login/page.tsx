@@ -1,8 +1,11 @@
 'use client';
+
+import FullScreenCenterLayout from "../../layout/full-screen-center-layout";
+
 export default function LoginPage() {
-    return <div className="w-screen h-screen flex justify-center items-center">
-    </div>
-
-
-
+    return <FullScreenCenterLayout>
+        <div>
+            something
+        </div>
+    </FullScreenCenterLayout>
 }
