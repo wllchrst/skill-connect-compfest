@@ -1,0 +1,7 @@
+
+name
+reviewCount
+level
+duration
+rating
+description
