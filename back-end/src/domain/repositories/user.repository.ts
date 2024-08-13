@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { DatabaseService } from 'src/infrastructure/database/database.service';
 
 @Injectable()
@@ -16,7 +16,58 @@ export class UserRepository {
     }
   }
 
-  async getAllUser() {}
+  async getAllUser(): Promise<User[]> {
+    try {
+      const users = await this.databaseService.user.findMany();
+      return users;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
 
-  async getUserById() {}
+  async getUserById(id: string): Promise<User | null> {
+    try {
+      const user = await this.databaseService.user.findFirst({
+        where: {
+          id: id,
+        },
+      });
+
+      return user;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  async getUserByEmail(email: string): Promise<User | null> {
+    try {
+      const user = await this.databaseService.user.findFirst({
+        where: {
+          email: email,
+        },
+      });
+
+      return user;
+    } catch (error) {
+      console.error(error);
+      return null;
+    }
+  }
+
+  async userExists(id: string): Promise<boolean> {
+    try {
+      const user = await this.databaseService.user.findFirst({
+        where: {
+          id: id,
+        },
+      });
+
+      return user ? true : false;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
 }

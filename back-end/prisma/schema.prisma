@@ -20,4 +20,37 @@ model User {
   password       String
   profilePicture String
   description    String
+
+  friends     Friend[]      @relation("FriendsOfCurrentUser")
+  friendsOf   Friend[]      @relation("CurrentUserFriend")
+  GroupMember GroupMember[]
+}
+
+model Friend {
+  userId    String
+  friendId  String
+  createdAt DateTime @default(now())
+
+  user   User @relation("FriendsOfCurrentUser", fields: [userId], references: [id])
+  friend User @relation("CurrentUserFriend", fields: [friendId], references: [id])
+
+  @@id([userId, friendId])
+  @@unique([userId, friendId])
+}
+
+model Group {
+  id          String   @id
+  groupName   String
+  description String   @default("")
+  createdAt   DateTime @default(now())
+
+  members GroupMember[]
+}
+
+model GroupMember {
+  id      String @id
+  groupId String
+  userId  String
+  user    User   @relation(fields: [userId], references: [id])
+  group   Group  @relation(fields: [groupId], references: [id])
 }

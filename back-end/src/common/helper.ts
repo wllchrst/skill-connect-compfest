@@ -1,11 +1,11 @@
-import { Response } from 'src/application/interfaces/response-interface';
+import { IResponse } from 'src/application/interfaces/response-interface';
 
 export class Helper {
   static createResponse<T>(
     data: T,
     message: string,
     success: boolean,
-  ): Response<T> {
+  ): IResponse<T> {
     return {
       data: data,
       message: message,
