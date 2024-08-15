@@ -18,7 +18,11 @@ export class UserRepository {
 
   async getAllUser(): Promise<User[]> {
     try {
-      const users = await this.databaseService.user.findMany();
+      const users = await this.databaseService.user.findMany({
+        include: {
+          friends: true,
+        },
+      });
       return users;
     } catch (error) {
       console.error(error);

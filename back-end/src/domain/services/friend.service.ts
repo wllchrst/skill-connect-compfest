@@ -32,6 +32,18 @@ export class FriendService {
       );
     }
 
+    const alreadyFriend = await this.friendRepository.isAlreadyFriend(
+      addFriendDTO.userId,
+      addFriendDTO.friendId,
+    );
+
+    if (alreadyFriend)
+      return Helper.createResponse(
+        false,
+        `You are already friend with User ID: ${addFriendDTO.friendId}`,
+        false,
+      );
+
     const result = await this.friendRepository.addFriend({
       friend: {
         connect: {
