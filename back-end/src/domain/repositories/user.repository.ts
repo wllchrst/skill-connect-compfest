@@ -21,6 +21,11 @@ export class UserRepository {
       const users = await this.databaseService.user.findMany({
         include: {
           friends: true,
+          CourseInteraction: {
+            include: {
+              course: true,
+            },
+          },
         },
       });
       return users;

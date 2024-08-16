@@ -14,16 +14,18 @@ datasource db {
 }
 
 model User {
-  id             String @id
+  id             String    @id
   name           String
-  email          String @unique
+  email          String    @unique
   password       String
   profilePicture String
   description    String
+  dateOfBirth    DateTime?
 
-  friends     Friend[]      @relation("FriendsOfCurrentUser")
-  friendsOf   Friend[]      @relation("CurrentUserFriend")
-  GroupMember GroupMember[]
+  friends           Friend[]            @relation("FriendsOfCurrentUser")
+  friendsOf         Friend[]            @relation("CurrentUserFriend")
+  GroupMember       GroupMember[]
+  CourseInteraction CourseInteraction[]
 }
 
 model Friend {
@@ -53,4 +55,24 @@ model GroupMember {
   userId  String
   user    User   @relation(fields: [userId], references: [id])
   group   Group  @relation(fields: [groupId], references: [id])
+}
+
+model Course {
+  id                String              @id
+  courseLink        String
+  courseName        String
+  courseDescription String
+  coursePrice       Int
+  CourseInteraction CourseInteraction[]
+}
+
+model CourseInteraction {
+  id              String   @id
+  userId          String
+  courseId        String
+  interactionType String
+  timestamp       DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
 }
