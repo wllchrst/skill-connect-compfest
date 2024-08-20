@@ -1,0 +1,10 @@
+-- AlterTable
+ALTER TABLE `User` MODIFY `description` VARCHAR(191) NOT NULL DEFAULT '',
+    MODIFY `profilePicture` VARCHAR(191) NOT NULL DEFAULT '',
+    MODIFY `currentEducation` VARCHAR(191) NOT NULL DEFAULT '',
+    MODIFY `experienceYears` INTEGER NOT NULL DEFAULT -1,
+    MODIFY `interest` VARCHAR(191) NOT NULL DEFAULT '',
+    MODIFY `language` VARCHAR(191) NOT NULL DEFAULT '',
+    MODIFY `learningResource` VARCHAR(191) NOT NULL DEFAULT '',
+    MODIFY `skill` VARCHAR(191) NOT NULL DEFAULT '',
+    MODIFY `tools` VARCHAR(191) NOT NULL DEFAULT '';

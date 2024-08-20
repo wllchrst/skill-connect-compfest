@@ -1,0 +1,55 @@
+const interestType = [
+  'Machine Learning',
+  'Deep Learning',
+  'Natural Language Processing',
+  'Computer Vision',
+  'Reinforcement Learning',
+  'Robotics',
+  'Expert Systems',
+  'Speech Recognition',
+  'Generative AI',
+  'Neural Networks',
+  'AI Ethics',
+  'Cognitive Computing',
+  'AI in Healthcare',
+  'AI in Finance',
+  'AI in Education',
+  'Recommender Systems',
+  'Autonomous Vehicles',
+  'AI for Games',
+  'AI Planning and Optimization',
+];
+
+const learningResources = [
+  'Coursera',
+  'edX',
+  'Udemy',
+  'Stanford Online',
+  'DeepLearning.ai',
+  'Kaggle',
+  'MIT OpenCourseWare',
+  'Google AI',
+  'Harvard Online',
+  'YouTube',
+  'GitHub',
+];
+
+const toolTypes = [
+  'TensorFlow',
+  'PyTorch',
+  'Keras',
+  'OpenAI GPT',
+  'Hugging Face Transformers',
+  'Scikit-learn',
+  'Google Cloud AI',
+  'IBM Watson',
+  'Microsoft Azure AI',
+  'Amazon SageMaker',
+  'DataRobot',
+  'RapidMiner',
+  'BigML',
+  'Weka',
+  'OpenCV',
+];
+
+export { interestType, learningResources, toolTypes };

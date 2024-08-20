@@ -22,11 +22,9 @@ export class UserService {
 
     const createResult = await this.userRepository.create({
       id: v4(),
-      description: createUserDTO.description,
       email: createUserDTO.email,
       name: createUserDTO.name,
       password: createUserDTO.password,
-      profilePicture: createUserDTO.profilePictureLink,
     });
 
     const message = !createResult

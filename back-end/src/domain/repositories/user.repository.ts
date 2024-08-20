@@ -79,4 +79,22 @@ export class UserRepository {
       return false;
     }
   }
+
+  async updateUserData(
+    data: Prisma.UserUpdateInput,
+    userId: string,
+  ): Promise<boolean> {
+    try {
+      await this.databaseService.user.update({
+        where: {
+          id: userId,
+        },
+        data: data,
+      });
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
 }

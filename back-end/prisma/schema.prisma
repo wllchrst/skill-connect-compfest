@@ -18,17 +18,17 @@ model User {
   name             String
   email            String    @unique
   password         String
-  profilePicture   String
-  description      String
+  profilePicture   String    @default("")
+  description      String    @default("")
   dateOfBirth      DateTime?
-  language         String
+  language         String    @default("")
   createdAt        DateTime  @default(now())
-  skill            String
-  currentEducation String
-  experienceYears  Int
-  interest         String
-  learningResource String
-  tools            String
+  skill            String    @default("")
+  currentEducation String    @default("")
+  experienceYears  Int       @default(-1)
+  interest         String    @default("")
+  learningResource String    @default("")
+  tools            String    @default("")
 
   friends           Friend[]            @relation("FriendsOfCurrentUser")
   friendsOf         Friend[]            @relation("CurrentUserFriend")
