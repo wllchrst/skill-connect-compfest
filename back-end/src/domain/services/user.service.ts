@@ -5,6 +5,7 @@ import { v4 } from 'uuid';
 import { IResponse } from 'src/application/interfaces/response-interface';
 import { User } from '@prisma/client';
 import { Helper } from 'src/common/helper';
+import { UpdateUserDTO } from 'src/application/dtos/update-user-dto';
 
 @Injectable()
 export class UserService {
@@ -21,6 +22,15 @@ export class UserService {
       return Helper.createResponse(false, 'Email is already used', false);
 
     const createResult = await this.userRepository.create({
+      currentEducation: '',
+      description: '',
+      experienceYears: -1,
+      interest: '',
+      language: '',
+      learningResource: '',
+      profilePicture: '',
+      skill: '',
+      tools: '',
       id: v4(),
       email: createUserDTO.email,
       name: createUserDTO.name,
@@ -37,7 +47,7 @@ export class UserService {
   async getUserById(id: string): Promise<IResponse<User>> {
     const user = await this.userRepository.getUserById(id);
     const message = user == null ? 'User not found' : 'User Found';
-    const success = user == null ? false : true;
+    const success = user != null;
     return Helper.createResponse(user, message, success);
   }
 
@@ -52,5 +62,39 @@ export class UserService {
     const message = user == null ? 'User not found' : 'User Found';
     const success = user == null ? false : true;
     return Helper.createResponse(user, message, success);
+  }
+
+  async updateUserData(
+    updateUserDTO: UpdateUserDTO,
+  ): Promise<IResponse<boolean>> {
+    const userExists = await this.userRepository.userExists(updateUserDTO.id);
+    if (!userExists)
+      return Helper.createResponse(false, 'User was not found', false);
+
+    const updateResult = await this.userRepository.updateUserData(
+      {
+        id: updateUserDTO.id,
+        email: updateUserDTO.email,
+        name: updateUserDTO.name,
+        password: updateUserDTO.password,
+        skill: updateUserDTO.skill,
+        tools: updateUserDTO.tools.join(','),
+        language: updateUserDTO.language,
+        interest: updateUserDTO.interest.join(','),
+        description: updateUserDTO.description,
+        experienceYears: updateUserDTO.experienceYears,
+        learningResource: updateUserDTO.learningResource.join(','),
+        profilePicture: updateUserDTO.profilePictureLink,
+        currentEducation: updateUserDTO.currentEducation,
+        dateOfBirth: updateUserDTO.dateOfBirth,
+      },
+      updateUserDTO.id,
+    );
+
+    const message = updateResult
+      ? 'Updating user success'
+      : 'Something went wrong while updating user';
+
+    return Helper.createResponse(updateResult, message, updateResult);
   }
 }
