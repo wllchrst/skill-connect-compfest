@@ -13,13 +13,6 @@ export class FriendService {
   ) {}
 
   async addFriend(addFriendDTO: AddFriendDTO): Promise<IResponse<boolean>> {
-    if (addFriendDTO.friendId == addFriendDTO.userId)
-      return Helper.createResponse(
-        false,
-        'Cannot add yourself as friend',
-        false,
-      );
-
     const user = await this.userRepository.userExists(addFriendDTO.userId);
     const friend = await this.userRepository.userExists(addFriendDTO.friendId);
 
@@ -31,34 +24,5 @@ export class FriendService {
         false,
       );
     }
-
-    const alreadyFriend = await this.friendRepository.isAlreadyFriend(
-      addFriendDTO.userId,
-      addFriendDTO.friendId,
-    );
-
-    if (alreadyFriend)
-      return Helper.createResponse(
-        false,
-        `You are already friend with User ID: ${addFriendDTO.friendId}`,
-        false,
-      );
-
-    const result = await this.friendRepository.addFriend({
-      friend: {
-        connect: {
-          id: addFriendDTO.friendId,
-        },
-      },
-      user: {
-        connect: {
-          id: addFriendDTO.userId,
-        },
-      },
-    });
-
-    const message = result ? 'Success adding friend' : 'Failed adding friend';
-
-    return Helper.createResponse(result, message, result);
   }
 }
