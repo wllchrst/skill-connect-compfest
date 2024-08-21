@@ -12,7 +12,7 @@ export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
   validateCourseCreation(createCourseDTO: CreateCrouseDTO): string {
-    var message = '';
+    let message = '';
 
     if (
       createCourseDTO.courseDescription == null ||

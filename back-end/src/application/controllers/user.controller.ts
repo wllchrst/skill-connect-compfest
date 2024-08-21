@@ -1,6 +1,6 @@
 import { UpdateUserDTO } from './../dtos/update-user-dto';
 import { UserService } from 'src/domain/services/user.service';
-import { Body, Controller, Get, Param, Patch, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { IResponse } from '../interfaces/response-interface';
 import { Helper } from 'src/common/helper';
 import { CreateUserDTO } from '../dtos/create-user.dto';
@@ -34,7 +34,7 @@ export class UserController {
   @Get(':id')
   async getUserById(@Param() param: any): Promise<IResponse<User>> {
     const userId = param.id;
-    if (userId == undefined || userId == null)
+    if (userId == undefined)
       return Helper.createResponse(null, 'User Id cannot be null', false);
   }
 
@@ -45,6 +45,8 @@ export class UserController {
     const validationResult = this.validateUpdateUserDTO(updateUserDTO);
     if (validationResult != '')
       return Helper.createResponse(false, validationResult, false);
+
+    return this.userService.updateUserData(updateUserDTO);
   }
 
   validateUpdateUserDTO(data: UpdateUserDTO): string {
