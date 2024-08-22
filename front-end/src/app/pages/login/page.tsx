@@ -13,7 +13,7 @@ function LoginPage() {
           </h2>
           <p className="text-sm text-muted-foreground">
             You need to login first to your account before using the website.{" "}
-            <Link href={"/pages/login"} className="underline">
+            <Link href={"/pages/register"} className="underline">
               Click here
             </Link>{" "}
             if you do not have an account
