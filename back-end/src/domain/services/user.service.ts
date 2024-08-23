@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { CreateUserDTO } from 'src/application/dtos/create-user.dto';
 import { v4 } from 'uuid';
@@ -6,6 +6,7 @@ import { IResponse } from 'src/application/interfaces/response-interface';
 import { User } from '@prisma/client';
 import { Helper } from 'src/common/helper';
 import { UpdateUserDTO } from 'src/application/dtos/update-user-dto';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class UserService {

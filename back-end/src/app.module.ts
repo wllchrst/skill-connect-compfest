@@ -6,6 +6,7 @@ import { SharedModule } from './modules/shared.module';
 import { GroupModule } from './modules/group.module';
 import { FriendModule } from './modules/friend.module';
 import { CourseModule } from './modules/course.module';
+import AuthModule from './modules/auth.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { CourseModule } from './modules/course.module';
     FriendModule,
     SharedModule,
     CourseModule,
+    AuthModule,
   ],
   providers: [],
   exports: [],

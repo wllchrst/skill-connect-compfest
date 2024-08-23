@@ -1,6 +1,14 @@
 import { UpdateUserDTO } from './../dtos/update-user-dto';
 import { UserService } from 'src/domain/services/user.service';
-import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { IResponse } from '../interfaces/response-interface';
 import { Helper } from 'src/common/helper';
 import { CreateUserDTO } from '../dtos/create-user.dto';
@@ -10,10 +18,13 @@ import {
   learningResources,
   toolTypes,
 } from '../types/user-data-types';
+import { AuthGuard } from '../guards/auth.guard';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @UseGuards(AuthGuard)
   @Get()
   async getAllUser(): Promise<IResponse<User[]>> {
     return await this.userService.getAllUser();

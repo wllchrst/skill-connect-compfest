@@ -1,9 +1,8 @@
-import { Button } from "@/components/ui/button";
-
+"use client";
+import { useRouter } from "next/navigation";
 export default function Home() {
-  return (
-    <div>
-      <Button>This is button</Button>
-    </div>
-  );
+  const router = useRouter();
+
+  router.push("/pages/login");
+  return <></>;
 }
