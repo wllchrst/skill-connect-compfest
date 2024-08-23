@@ -1,4 +1,4 @@
-export interface IUser {
+export interface UserDTO {
   id: string;
   name: string;
   email: string;

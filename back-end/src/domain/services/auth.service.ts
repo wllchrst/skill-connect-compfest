@@ -4,6 +4,7 @@ import { LoginUserDTO } from 'src/application/dtos/login-user-dto';
 import { IResponse } from 'src/application/interfaces/response-interface';
 import { Helper } from 'src/common/helper';
 import { JwtService } from '@nestjs/jwt';
+import { IUserPayload } from 'src/application/interfaces/user-payload-interface';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +21,7 @@ export class AuthService {
     else if (data.password != loginUserDTO.password)
       return Helper.createResponse('', 'Wrong email or password', false);
 
-    const payload = { sub: data.id, username: data.email };
+    const payload: IUserPayload = { id: data.id, email: data.email };
     const token = await this.jwtService.signAsync(payload);
 
     return Helper.createResponse(token, 'Login successful', true);

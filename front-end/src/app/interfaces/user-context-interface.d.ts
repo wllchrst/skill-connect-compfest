@@ -1,4 +1,6 @@
-
 export interface IUserContext {
-    user: IUser
+  user: IUser | null;
+  loggedIn: boolean;
+  setUser: (user: IUser | null) => void;
+  setLoggedIn: (loggedIn: boolean) => void;
 }

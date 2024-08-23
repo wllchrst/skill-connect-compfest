@@ -2,6 +2,8 @@ import BackendService from "@/app/service/backend-service";
 import { ICreateUser } from "../interfaces/create-user-interface";
 import { IResponse } from "../interfaces/response-interface";
 import { ILoginUser } from "../interfaces/login-user-interface";
+import { IUser } from "../interfaces/user-interface";
+import { AxiosRequestConfig } from "axios";
 
 class UserService extends BackendService {
   static instance: UserService | null = null;
@@ -22,6 +24,20 @@ class UserService extends BackendService {
 
   async loginUser(loginUserDTO: ILoginUser) {
     const response = await this.post<IResponse<string>>("auth", loginUserDTO);
+    return response.data;
+  }
+
+  async getUserInformation(token: string) {
+    const config: AxiosRequestConfig = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const response = await this.get<IResponse<IUser>>(
+      "user/information",
+      config
+    );
+
     return response.data;
   }
 }

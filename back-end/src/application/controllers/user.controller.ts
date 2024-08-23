@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { IResponse } from '../interfaces/response-interface';
@@ -19,6 +20,8 @@ import {
   toolTypes,
 } from '../types/user-data-types';
 import { AuthGuard } from '../guards/auth.guard';
+import { UserDTO } from '../dtos/user-dto';
+import { IUserPayload } from '../interfaces/user-payload-interface';
 
 @Controller('user')
 export class UserController {
@@ -28,6 +31,38 @@ export class UserController {
   @Get()
   async getAllUser(): Promise<IResponse<User[]>> {
     return await this.userService.getAllUser();
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('information')
+  async getUserInformation(@Request() req): Promise<IResponse<UserDTO | null>> {
+    const userPayload = req.userPayload as IUserPayload;
+    if (userPayload == undefined || userPayload == null)
+      return Helper.createResponse(null, 'Something went wrong', false);
+
+    const { data } = await this.userService.getUserById(userPayload.id);
+    if (data == null)
+      return Helper.createResponse(null, 'User was not found', false);
+
+    return Helper.createResponse(
+      {
+        id: data.id,
+        currentEducation: data.currentEducation,
+        dateOfBirth: data.dateOfBirth,
+        description: data.description,
+        email: data.email,
+        experienceYears: data.experienceYears,
+        interest: data.interest.split(','),
+        language: data.language,
+        learningResource: data.learningResource.split(','),
+        name: data.name,
+        profilePictureLink: data.profilePicture,
+        skill: data.skill,
+        tools: data.tools.split(','),
+      },
+      'User Informatoin',
+      true,
+    );
   }
 
   @Post()
