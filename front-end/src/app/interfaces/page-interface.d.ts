@@ -4,4 +4,5 @@ export interface IPage {
     name: string;
     path: string;
     icon: JSX.Element
+    iconActive: JSX.Element
 }
