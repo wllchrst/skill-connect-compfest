@@ -1,10 +1,10 @@
 "use client";
+import ToastBuilder from "@/app/builder/toast-builder";
 import { ICreateUser } from "@/app/interfaces/create-user-interface";
 import FormPageLayout from "@/app/layout/form-page-layout";
 import UserService from "@/app/service/user-service";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -21,35 +21,26 @@ const user = UserService.getInstance();
 
 function RegisterPage() {
   const { register, handleSubmit } = useForm<ICreateUser>();
-  const { toast } = useToast();
+  const toast = new ToastBuilder("Registering your account");
   const router = useRouter();
 
   const onSubmit: SubmitHandler<ICreateUser> = (data) => {
     const validationMessage = validateCreateUserData(data);
     if (validationMessage != "") {
-      toast({
-        description: validationMessage,
-        variant: "destructive",
-        duration: 2000,
-      });
+      toast.destructive(validationMessage);
       return;
     }
-
-    toast({
-      description: "Registering your account",
-      duration: 2000,
-    });
-
+    toast.normal("Please wait a moment");
     try {
       user.registerUser(data).then((result) => {
-        if (result.data) router.push("/pages/login");
+        if (result.data) {
+          toast.normal("Successful");
+          router.push("/pages/login");
+        }
       });
     } catch (error) {
       console.error(error);
-      toast({
-        description: `${error}`,
-        duration: 2000,
-      });
+      toast.destructive(`Something went wrong: ${error}`);
     }
   };
 

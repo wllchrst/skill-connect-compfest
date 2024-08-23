@@ -1,10 +1,13 @@
 "use client";
+import ToastBuilder from "@/app/builder/toast-builder";
 import { ILoginUser } from "@/app/interfaces/login-user-interface";
 import FormPageLayout from "@/app/layout/form-page-layout";
+import UserService from "@/app/service/user-service";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
+import Cookies from "js-cookie";
 
 function validateLoginData(loginUser: ILoginUser): string {
   if (loginUser.email == "" || loginUser.password == "")
@@ -13,15 +16,29 @@ function validateLoginData(loginUser: ILoginUser): string {
   return "";
 }
 
+const userService = new UserService();
+
 function LoginPage() {
   const { register, handleSubmit } = useForm<ILoginUser>();
+  const toast = new ToastBuilder("Login");
 
   const submitHandle: SubmitHandler<ILoginUser> = (data) => {
     const validationMessage = validateLoginData(data);
-
     if (validationMessage != "") {
-      toast({});
+      toast.destructive(validationMessage);
       return;
+    }
+
+    try {
+      userService.loginUser(data).then((result) => {
+        if (result.success) {
+          toast.normal("Login Successful");
+          Cookies.set("token", result.data);
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      toast.destructive(`Something went wrong: ${error}`);
     }
   };
 
