@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 function validateLoginData(loginUser: ILoginUser): string {
   if (loginUser.email == "" || loginUser.password == "")
@@ -21,6 +22,7 @@ const userService = new UserService();
 function LoginPage() {
   const { register, handleSubmit } = useForm<ILoginUser>();
   const toast = new ToastBuilder("Login");
+  const router = useRouter();
 
   const submitHandle: SubmitHandler<ILoginUser> = (data) => {
     const validationMessage = validateLoginData(data);
@@ -34,6 +36,7 @@ function LoginPage() {
         if (result.success) {
           toast.normal("Login Successful");
           Cookies.set("token", result.data);
+          router.push("/pages/home");
         }
       });
     } catch (error) {
