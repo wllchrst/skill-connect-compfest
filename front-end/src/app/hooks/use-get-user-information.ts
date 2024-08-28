@@ -5,7 +5,7 @@ import UserService from "../service/user-service";
 import { useUserContext } from "../contexts/user-context";
 
 export default function useGetUserInformation() {
-  const { setUser } = useUserContext();
+  const { setUser, user } = useUserContext();
   const [isLoading, setIsLoading] = useState(true);
   const userService = UserService.getInstance();
   const userToken = Cookies.get(userTokenKey);
@@ -29,5 +29,5 @@ export default function useGetUserInformation() {
     fetchUserInformation();
   }, []);
 
-  return { isLoading };
+  return { isLoading, user };
 }

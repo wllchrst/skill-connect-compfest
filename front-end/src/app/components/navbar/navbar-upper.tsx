@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import skillConnectLogo from "../../../../public/SkillConnectLogo.png";
+import { InputTransparent } from "@/components/ui/input-transparent";
 
 function NavbarUpper() {
   const pathName = usePathname();
@@ -12,7 +13,6 @@ function NavbarUpper() {
   function clickHandle(path: string) {
     router.push(path);
   }
-
   const activeClassname = "bg-white text-black";
 
   return (
@@ -24,17 +24,22 @@ function NavbarUpper() {
           className={"w-[80%]"}
         />
       </div>
+
+      {/* <div className="flex mb-3 ">
+        <InputTransparent placeholder="Search" />
+      </div> */}
+
       {pageList.map((page, index) => (
         <div
           key={index}
-          className={`flex transition-all delay-100 hover:transition-all items-center gap-5 p-3 hover:bg-white hover:text-black rounded-md font-bold ${
+          className={`flex transition-all delay-100 hover:transition-all items-center gap-5 p-3 hover:bg-[rgb(255,255,255,0.8)] hover:text-black rounded-md font-bold ${
             page.path == pathName ? activeClassname : ""
           }`}
           onClick={() => clickHandle(page.path)}
         >
           <div>{page.path == pathName ? page.iconActive : page.icon}</div>
           <div>
-            <Link href={page.path} className={"text-lg"}>
+            <Link href={page.path} className={"text-base"}>
               {page.name}
             </Link>
           </div>

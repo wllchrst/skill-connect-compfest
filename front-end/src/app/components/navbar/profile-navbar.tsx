@@ -1,27 +1,60 @@
+import ToastBuilder from "@/app/builder/toast-builder";
 import { useUserContext } from "@/app/contexts/user-context";
+import { login_path } from "@/app/data/page-paths";
+import UserService from "@/app/service/user-service";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { IoLogOutOutline, IoLogOut } from "react-icons/io5";
+
+const userService = UserService.getInstance();
 
 function ProfileNavbar() {
   const { user } = useUserContext();
   const [isHovering, setIsHovering] = useState(false);
+  const [divHovering, setDivHovering] = useState(false);
+  const toast = new ToastBuilder("Log Out");
+  const router = useRouter();
+
+  function logOutHandle() {
+    const result = userService.logOut();
+    if (result == true) {
+      toast.normal("Logged out");
+      router.push(login_path);
+    } else toast.destructive("Something went wrong");
+  }
+
   return (
-    <div className="">
-      <div className="flex justify-between items-center">
+    <div
+      className="flex justify-between items-center"
+      onMouseEnter={() => setDivHovering(true)}
+      onMouseLeave={() => setDivHovering(false)}
+    >
+      <div className="flex items-center gap-4">
+        <div className="w-10 h-10 object-cover rounded-md overflow-hidden">
+          <Image
+            src={user.profilePictureLink}
+            alt=""
+            width={100}
+            height={100}
+          />
+        </div>
         <div>
-          <h3 className="scroll-m-20 text-1xl font-semibold tracking-tight m-0">
+          <h3
+            className={"scroll-m-20 text-1xl font-semibold tracking-tight m-0 "}
+          >
             {user.name}
           </h3>
           <p className="text-sm text-muted-foreground m-0">{user.email}</p>
         </div>
+      </div>
 
-        <div
-          className=""
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
-        >
-          {isHovering ? <IoLogOut size={24} /> : <IoLogOutOutline size={24} />}
-        </div>
+      <div
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+        onClick={() => logOutHandle()}
+      >
+        {isHovering ? <IoLogOut size={24} /> : <IoLogOutOutline size={24} />}
       </div>
     </div>
   );

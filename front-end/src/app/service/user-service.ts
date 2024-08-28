@@ -4,6 +4,8 @@ import { IResponse } from "../interfaces/response-interface";
 import { ILoginUser } from "../interfaces/login-user-interface";
 import { IUser } from "../interfaces/user-interface";
 import { AxiosRequestConfig } from "axios";
+import Cookies from "js-cookie";
+import { userTokenKey } from "../data/web-contant";
 
 class UserService extends BackendService {
   static instance: UserService | null = null;
@@ -39,6 +41,16 @@ class UserService extends BackendService {
     );
 
     return response.data;
+  }
+
+  logOut(): boolean {
+    try {
+      Cookies.remove(userTokenKey);
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
   }
 }
 

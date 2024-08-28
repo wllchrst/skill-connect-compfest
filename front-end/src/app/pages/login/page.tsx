@@ -9,6 +9,10 @@ import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { useUserContext } from "@/app/contexts/user-context";
+import useGetUserInformation from "@/app/hooks/use-get-user-information";
+import Loading from "@/app/components/loading";
+import { home_path } from "@/app/data/page-paths";
 
 function validateLoginData(loginUser: ILoginUser): string {
   if (loginUser.email == "" || loginUser.password == "")
@@ -22,7 +26,12 @@ const userService = new UserService();
 function LoginPage() {
   const { register, handleSubmit } = useForm<ILoginUser>();
   const toast = new ToastBuilder("Login");
+  const { user, isLoading } = useGetUserInformation();
   const router = useRouter();
+
+  if (user != null) router.push(home_path);
+
+  if (isLoading) return <Loading />;
 
   const submitHandle: SubmitHandler<ILoginUser> = (data) => {
     const validationMessage = validateLoginData(data);
