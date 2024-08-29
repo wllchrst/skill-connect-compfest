@@ -7,6 +7,7 @@ import { GroupModule } from './modules/group.module';
 import { FriendModule } from './modules/friend.module';
 import { CourseModule } from './modules/course.module';
 import AuthModule from './modules/auth.module';
+import { DatabaseModule } from './modules/database.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import AuthModule from './modules/auth.module';
     SharedModule,
     CourseModule,
     AuthModule,
+    DatabaseModule,
   ],
   providers: [],
   exports: [],

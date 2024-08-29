@@ -12,4 +12,21 @@ export class Helper {
       success: success,
     };
   }
+
+  static getRandomNumber(lower: number, upper: number): number {
+    return Math.floor(Math.random() * (upper - lower + 1)) + lower;
+  }
+
+  static scaleNumber(
+    value: number,
+    oldMin: number,
+    oldMax: number,
+    newMin: number,
+    newMax: number,
+  ): number {
+    const result = Math.floor(
+      ((value - oldMin) / (oldMax - oldMin)) * (newMax - newMin) + newMin,
+    );
+    return result;
+  }
 }
