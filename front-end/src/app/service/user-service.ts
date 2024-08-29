@@ -30,6 +30,7 @@ class UserService extends BackendService {
   }
 
   async getUserInformation(token: string) {
+    console.log("getting user information");
     const config: AxiosRequestConfig = {
       headers: {
         Authorization: `Bearer ${token}`,
