@@ -29,6 +29,7 @@ model User {
   interest         String    @default("")
   learningResource String    @default("")
   tools            String    @default("")
+  filledInformation Boolean @default(false)
 
   friends           Friend[]            @relation("FriendsOfCurrentUser")
   friendsOf         Friend[]            @relation("CurrentUserFriend")

@@ -52,4 +52,27 @@ const toolTypes = [
   'OpenCV',
 ];
 
-export { interestType, learningResources, toolTypes };
+const humanLanguages: string[] = [
+  'English',
+  'Spanish',
+  'Mandarin',
+  'Hindi',
+  'French',
+  'Arabic',
+  'Bengali',
+  'Portuguese',
+  'Russian',
+  'Japanese',
+  'German',
+  'Korean',
+  'Italian',
+  'Turkish',
+  'Vietnamese',
+  'Thai',
+  'Dutch',
+  'Greek',
+  'Swedish',
+  'Polish',
+];
+
+export { interestType, learningResources, toolTypes, humanLanguages };
