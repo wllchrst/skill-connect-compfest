@@ -8,6 +8,7 @@ import { FriendModule } from './modules/friend.module';
 import { CourseModule } from './modules/course.module';
 import AuthModule from './modules/auth.module';
 import { DatabaseModule } from './modules/database.module';
+import { ChatModule } from './modules/chat.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { DatabaseModule } from './modules/database.module';
     CourseModule,
     AuthModule,
     DatabaseModule,
+    ChatModule,
   ],
   providers: [],
   exports: [],

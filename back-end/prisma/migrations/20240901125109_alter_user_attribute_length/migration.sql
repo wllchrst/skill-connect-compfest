@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `User` MODIFY `skill` VARCHAR(500) NOT NULL DEFAULT '',
+    MODIFY `interest` VARCHAR(500) NOT NULL DEFAULT '',
+    MODIFY `learningResource` VARCHAR(500) NOT NULL DEFAULT '',
+    MODIFY `tools` VARCHAR(500) NOT NULL DEFAULT '';

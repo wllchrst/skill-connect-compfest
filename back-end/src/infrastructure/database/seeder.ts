@@ -57,7 +57,6 @@ export class DatabaseSeeder {
         )
       ];
 
-    console.log(education);
     const experienceYears = Helper.scaleNumber(
       level,
       Setting.lowerScale,
@@ -87,7 +86,7 @@ export class DatabaseSeeder {
       name: faker.person.fullName(),
       password: faker.string.uuid(),
       currentEducation: education,
-      dateOfBirth: faker.date.past(20),
+      dateOfBirth: faker.date.past({ years: 20 }),
       profilePicture: '',
       description: '',
       experienceYears: experienceYears,
@@ -107,6 +106,11 @@ export class DatabaseSeeder {
       for (let i = 0; i < seedNumber; i++) {
         users.push(this.createUserSeed());
       }
+
+      const defaultUser: Prisma.UserCreateInput = users[0];
+      defaultUser.email = 'test@gmail.com';
+      defaultUser.name = 'William Christian';
+      defaultUser.password = 'test123';
 
       await this.databaseService.user.createMany({ data: users });
       return true;

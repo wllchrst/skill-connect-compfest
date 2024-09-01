@@ -14,27 +14,30 @@ datasource db {
 }
 
 model User {
-  id               String    @id
-  name             String
-  email            String    @unique
-  password         String
-  profilePicture   String    @default("")
-  description      String    @default("")
-  dateOfBirth      DateTime?
-  language         String    @default("")
-  createdAt        DateTime  @default(now())
-  skill            String    @default("")
-  currentEducation String    @default("")
-  experienceYears  Int       @default(-1)
-  interest         String    @default("")
-  learningResource String    @default("")
-  tools            String    @default("")
-  filledInformation Boolean @default(false)
+  id                String    @id
+  name              String
+  email             String    @unique
+  password          String
+  profilePicture    String    @default("")
+  description       String    @default("")
+  dateOfBirth       DateTime?
+  language          String    @default("")
+  createdAt         DateTime  @default(now())
+  skill             String    @default("") @db.VarChar(500)
+  currentEducation  String    @default("")
+  experienceYears   Int       @default(-1)
+  interest          String    @default("") @db.VarChar(500)
+  learningResource  String    @default("") @db.VarChar(500)
+  tools             String    @default("") @db.VarChar(500)
+  filledInformation Boolean   @default(false)
 
   friends           Friend[]            @relation("FriendsOfCurrentUser")
   friendsOf         Friend[]            @relation("CurrentUserFriend")
   GroupMember       GroupMember[]
   CourseInteraction CourseInteraction[]
+  ReceiverChat      PersonalChat[]      @relation("receiver")
+  SenderChat        PersonalChat[]      @relation("sender")
+  SenderGroupChat   GroupChat[]
 }
 
 model Friend {
@@ -55,7 +58,8 @@ model Group {
   description String   @default("")
   createdAt   DateTime @default(now())
 
-  members GroupMember[]
+  members   GroupMember[]
+  GroupChat GroupChat[]
 }
 
 model GroupMember {
@@ -84,4 +88,26 @@ model CourseInteraction {
 
   user   User   @relation(fields: [userId], references: [id])
   course Course @relation(fields: [courseId], references: [id])
+}
+
+model PersonalChat {
+  id         String   @id
+  senderId   String
+  receiverId String
+  message    String
+  timestamp  DateTime @default(now())
+
+  Sender   User @relation(name: "sender", fields: [senderId], references: [id])
+  Receiver User @relation(name: "receiver", fields: [receiverId], references: [id])
+}
+
+model GroupChat {
+  id        String   @id
+  senderId  String
+  groupId   String
+  message   String
+  timestamp DateTime @default(now())
+
+  Sender User  @relation(fields: [senderId], references: [id])
+  Group  Group @relation(fields: [groupId], references: [id])
 }
