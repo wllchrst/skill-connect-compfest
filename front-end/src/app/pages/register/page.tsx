@@ -1,5 +1,6 @@
 "use client";
 import ToastBuilder from "@/app/builder/toast-builder";
+import { useUserContext } from "@/app/contexts/user-context";
 import { ICreateUser } from "@/app/interfaces/create-user-interface";
 import FormPageLayout from "@/app/layout/form-page-layout";
 import UserService from "@/app/service/user-service";
@@ -20,9 +21,12 @@ function validateCreateUserData(data: ICreateUser): string {
 const user = UserService.getInstance();
 
 function RegisterPage() {
+  const { user } = useUserContext();
   const { register, handleSubmit } = useForm<ICreateUser>();
   const toast = new ToastBuilder("Registering your account");
   const router = useRouter();
+
+  if (user != null) router.push("/pages/home");
 
   const onSubmit: SubmitHandler<ICreateUser> = (data) => {
     const validationMessage = validateCreateUserData(data);
@@ -46,7 +50,7 @@ function RegisterPage() {
 
   return (
     <FormPageLayout>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 w-1/4">
         <div className="mb-3">
           <h2 className="scroll-m-20 pb-2 text-2xl font-semibold tracking-tight first:mt-0">
             Create your account

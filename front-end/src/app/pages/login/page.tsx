@@ -25,13 +25,11 @@ const userService = new UserService();
 
 function LoginPage() {
   const { register, handleSubmit } = useForm<ILoginUser>();
+  const { user } = useUserContext();
   const toast = new ToastBuilder("Login");
-  const { user, isLoading } = useGetUserInformation();
   const router = useRouter();
 
   if (user != null) router.push(home_path);
-
-  if (isLoading) return <Loading />;
 
   const submitHandle: SubmitHandler<ILoginUser> = (data) => {
     const validationMessage = validateLoginData(data);

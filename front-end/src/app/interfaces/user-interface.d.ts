@@ -12,4 +12,5 @@ export interface IUser {
   interest: string[];
   learningResource: string[];
   tools: string[];
+  filledInformation: boolean;
 }

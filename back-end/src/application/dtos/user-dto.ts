@@ -12,4 +12,5 @@ export interface UserDTO {
   interest: string[];
   learningResource: string[];
   tools: string[];
+  filledInformation: boolean;
 }

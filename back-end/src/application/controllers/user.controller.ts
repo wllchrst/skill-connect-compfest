@@ -59,6 +59,7 @@ export class UserController {
         profilePictureLink: data.profilePicture,
         skill: data.skill,
         tools: data.tools.split(','),
+        filledInformation: data.filledInformation,
       },
       'User Informatoin',
       true,
