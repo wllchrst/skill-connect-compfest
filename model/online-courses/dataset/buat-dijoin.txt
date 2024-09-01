@@ -1,7 +1,0 @@
-title
-description
-rating
-review
-level
-url
-image
