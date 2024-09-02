@@ -50,7 +50,7 @@ function RegisterPage() {
 
   return (
     <FormPageLayout>
-      <div className="flex flex-col gap-3 w-1/4">
+      <div className="flex flex-col gap-3 w-full">
         <div className="mb-3">
           <h2 className="scroll-m-20 pb-2 text-2xl font-semibold tracking-tight first:mt-0">
             Create your account
