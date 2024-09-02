@@ -18,7 +18,7 @@ function validateCreateUserData(data: ICreateUser): string {
   return "";
 }
 
-const user = UserService.getInstance();
+const userService = UserService.getInstance();
 
 function RegisterPage() {
   const { user } = useUserContext();
@@ -36,7 +36,7 @@ function RegisterPage() {
     }
     toast.normal("Please wait a moment");
     try {
-      user.registerUser(data).then((result) => {
+      userService.registerUser(data).then((result) => {
         if (result.data) {
           toast.normal("Successful");
           router.push("/pages/login");
