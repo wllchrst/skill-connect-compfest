@@ -32,6 +32,19 @@ class BackendService {
     );
     return response;
   }
+
+  async patch<T>(
+    url: string,
+    data: any,
+    config: AxiosRequestConfig | null = null
+  ) {
+    const response = await axios.patch<T>(
+      this.backendUrl + url,
+      data,
+      config == null ? this.defaultRequestConfig : config
+    );
+    return response;
+  }
 }
 
 export default BackendService;

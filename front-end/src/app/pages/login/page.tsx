@@ -19,7 +19,7 @@ function validateLoginData(loginUser: ILoginUser): string {
   return "";
 }
 
-const userService = new UserService();
+const userService = UserService.getInstance();
 
 function LoginPage() {
   const { register, handleSubmit } = useForm<ILoginUser>();

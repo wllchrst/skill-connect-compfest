@@ -29,6 +29,15 @@ class UserService extends BackendService {
     return response.data;
   }
 
+  async updateUser(user: IUser): Promise<IResponse<boolean>> {
+    const response = await this.patch<IResponse<boolean>>("user", user, {
+      headers: {
+        Authorization: `Bearer ${Cookies.get(userTokenKey)}`,
+      }
+    });
+    return response.data;
+  }
+
   async getUserInformation(token: string) {
     console.log("getting user information");
     const config: AxiosRequestConfig = {
