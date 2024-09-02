@@ -119,6 +119,8 @@ export class UserService {
       ? 'Updating user success'
       : 'Something went wrong while updating user';
 
+    await this.trainFriendRecommendation();
+
     return Helper.createResponse(updateResult, message, updateResult);
   }
 }
