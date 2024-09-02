@@ -143,10 +143,6 @@ export class UserController {
       errors.push("Invalid or missing 'language'.");
     }
 
-    if (typeof data.skill !== 'string' || data.skill.trim() === '') {
-      errors.push("Invalid or missing 'skill'.");
-    }
-
     if (
       typeof data.currentEducation !== 'string' ||
       data.currentEducation.trim() === ''
@@ -165,6 +161,11 @@ export class UserController {
       errors.push(
         "Invalid or missing 'interest' (must be an array of strings).",
       );
+    }
+
+    for (const skill of data.skill) {
+      if (!interestType.includes(skill))
+        errors.push('Skill is not the same as the types');
     }
 
     for (const interest of data.interest) {

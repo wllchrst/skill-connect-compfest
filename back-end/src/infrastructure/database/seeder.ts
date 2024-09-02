@@ -70,7 +70,7 @@ export class DatabaseSeeder {
     const language =
       humanLanguages[Helper.getRandomNumber(0, humanLanguages.length)];
     const skill = this.createSelection(
-      learningResources,
+      interestType,
       Helper.scaleNumber(
         level,
         Setting.lowerScale,

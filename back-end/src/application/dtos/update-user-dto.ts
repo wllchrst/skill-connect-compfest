@@ -7,7 +7,7 @@ export interface UpdateUserDTO {
   description: string;
   dateOfBirth: Date;
   language: string;
-  skill: string;
+  skill: string[];
   currentEducation: string;
   experienceYears: number;
   interest: string[];
