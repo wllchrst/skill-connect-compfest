@@ -45,7 +45,7 @@ def training_friend_recommendation():
                 df[['experienceYears']].values])
 
     # Create and fit the model
-    knn = NearestNeighbors(n_neighbors=3, metric='euclidean')
+    knn = NearestNeighbors(n_neighbors=50, metric='euclidean')
     knn.fit(X)
 
     pathname = "./pickle/"

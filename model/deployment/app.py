@@ -12,5 +12,6 @@ def friend_recommendation(data: FriendRecommendationInput):
 
 @app.get('/train/friend-recommendation')
 def train_friend_recommendation():
+    print("training the model")
     training_friend_recommendation()
     return True

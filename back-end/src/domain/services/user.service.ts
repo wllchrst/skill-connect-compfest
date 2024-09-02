@@ -7,10 +7,14 @@ import { User } from '@prisma/client';
 import { Helper } from 'src/common/helper';
 import { UpdateUserDTO } from 'src/application/dtos/update-user-dto';
 import { AuthService } from './auth.service';
+import { ModelRepository } from '../repositories/model.repository';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly modelRepository: ModelRepository,
+  ) {}
 
   async createUser(createUserDTO: CreateUserDTO): Promise<IResponse<boolean>> {
     const userSameEmail = await this.userRepository.getUserByEmail(
@@ -63,6 +67,25 @@ export class UserService {
     const message = user == null ? 'User not found' : 'User Found';
     const success = user == null ? false : true;
     return Helper.createResponse(user, message, success);
+  }
+
+  async getUserRecommendation(userId: string): Promise<IResponse<User[]>> {
+    const users = await this.userRepository.getUserRecommendation(userId);
+    return Helper.createResponse(users, 'Recommended friends', true);
+  }
+
+  async trainFriendRecommendation(): Promise<IResponse<boolean>> {
+    try {
+      await this.modelRepository.trainFriendRecommendationModel();
+      return Helper.createResponse(true, 'Training successful', true);
+    } catch (error) {
+      console.error(error);
+      return Helper.createResponse(
+        false,
+        'Something went wrong look at backend',
+        false,
+      );
+    }
   }
 
   async updateUserData(

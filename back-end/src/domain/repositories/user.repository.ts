@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import { DatabaseService } from 'src/infrastructure/database/database.service';
+import { ModelRepository } from './model.repository';
 
 @Injectable()
 export class UserRepository {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly modelRepository: ModelRepository,
+  ) {}
 
   async create(data: Prisma.UserCreateInput): Promise<boolean> {
     try {
@@ -13,6 +17,22 @@ export class UserRepository {
     } catch (error) {
       console.log(error);
       return false;
+    }
+  }
+
+  async getUserRecommendation(userId: string): Promise<User[]> {
+    try {
+      const friendIds =
+        await this.modelRepository.getFriendRecommendationList(userId);
+
+      const users = await this.databaseService.user.findMany({
+        where: { id: { in: friendIds } },
+      });
+
+      return users;
+    } catch (error) {
+      console.error(error);
+      return [];
     }
   }
 

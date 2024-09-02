@@ -3,6 +3,7 @@ import { UserService } from 'src/domain/services/user.service';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -83,6 +84,30 @@ export class UserController {
     const userId = param.id;
     if (userId == undefined)
       return Helper.createResponse(null, 'User Id cannot be null', false);
+  }
+
+  @Post('train-friend-recommendation')
+  async apus(): Promise<IResponse<boolean>> {
+    return this.userService.trainFriendRecommendation();
+  }
+
+  @Get('friend-recommendation/:id')
+  async getFriendRecommendation(
+    @Param() params: any,
+  ): Promise<IResponse<User[]>> {
+    const userId = params.id;
+    console.log(userId);
+
+    if (userId == undefined || userId == null)
+      return Helper.createResponse(
+        [],
+        'There is no user id in the parameter',
+        false,
+      );
+    else if (userId == '')
+      return Helper.createResponse([], 'User id cannot be empty', false);
+
+    return await this.userService.getUserRecommendation(userId);
   }
 
   @Patch()
