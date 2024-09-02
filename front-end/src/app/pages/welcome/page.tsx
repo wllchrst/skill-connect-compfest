@@ -35,7 +35,7 @@ function validateData(user: IUser): string {
     user.dateOfBirth == null ||
     user.profilePictureLink == "" ||
     user.language == "" ||
-    user.skill == "" ||
+    user.skill.length == 0 ||
     user.interest.length == 0 ||
     user.learningResource.length == 0 ||
     user.tools.length == 0

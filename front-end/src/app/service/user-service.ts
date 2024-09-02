@@ -6,6 +6,7 @@ import { IUser } from "../interfaces/user-interface";
 import { AxiosRequestConfig } from "axios";
 import Cookies from "js-cookie";
 import { userTokenKey } from "../data/web-contant";
+import { IAddFriend } from "../interfaces/add-friend-interface";
 
 class UserService extends BackendService {
   static instance: UserService | null = null;
@@ -33,7 +34,7 @@ class UserService extends BackendService {
     const response = await this.patch<IResponse<boolean>>("user", user, {
       headers: {
         Authorization: `Bearer ${Cookies.get(userTokenKey)}`,
-      }
+      },
     });
     return response.data;
   }
@@ -48,6 +49,30 @@ class UserService extends BackendService {
     const response = await this.get<IResponse<IUser>>(
       "user/information",
       config
+    );
+
+    return response.data;
+  }
+
+  async updateUserInformation(user: IUser): Promise<IResponse<boolean>> {
+    try {
+      console.log("update user information");
+      const response = await this.patch<IResponse<boolean>>("user", user);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return {
+        data: false,
+        message: "Something went wrong",
+        success: false,
+      };
+    }
+  }
+
+  async addFriend(addFriendData: IAddFriend): Promise<IResponse<boolean>> {
+    const response = await this.post<IResponse<boolean>>(
+      "friend",
+      addFriendData
     );
 
     return response.data;
