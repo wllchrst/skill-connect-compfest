@@ -137,12 +137,6 @@ export class UserController {
       errors.push("Invalid or missing 'email'.");
     }
 
-    if (typeof data.password !== 'string' || data.password.length < 8) {
-      errors.push(
-        "Invalid or missing 'password' (must be at least 8 characters).",
-      );
-    }
-
     if (
       typeof data.profilePictureLink !== 'string' ||
       data.profilePictureLink.trim() === ''

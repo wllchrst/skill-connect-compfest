@@ -5,6 +5,11 @@ import { DatabaseAPIService } from 'src/domain/services/database.service';
 export class DatabaseController {
   constructor(private readonly databaseService: DatabaseAPIService) {}
 
+  @Get('course')
+  async seedCourse() {
+    return await this.databaseService.seedCourseData();
+  }
+
   @Get('user')
   async seedUser() {
     try {

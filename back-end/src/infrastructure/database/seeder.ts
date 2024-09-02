@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { faker } from '@faker-js/faker';
-import { Prisma } from '@prisma/client';
+import { Course, Prisma } from '@prisma/client';
 import { DatabaseService } from './database.service';
 import { v4 } from 'uuid';
 import { Helper } from 'src/common/helper';
@@ -12,6 +12,9 @@ import {
   learningResources,
   toolTypes,
 } from 'src/application/types/user-data-types';
+import * as fs from 'fs';
+import * as Papa from 'papaparse';
+import { title } from 'process';
 
 @Injectable()
 export class DatabaseSeeder {
@@ -118,5 +121,35 @@ export class DatabaseSeeder {
       console.error(error);
       return false;
     }
+  }
+
+  async seedCourse() {
+    // Read the CSV file
+    const csvFile = fs.readFileSync(
+      'src/infrastructure/database/data/final_courses_data.csv',
+      'utf8',
+    );
+
+    // Parse the CSV file
+    Papa.parse(csvFile, {
+      header: true, // Assumes the CSV has headers
+      complete: async (results) => {
+        // Convert the parsed data to the Course type
+        const courses: Prisma.CourseCreateManyInput = results.data.map(
+          (item: any) => ({
+            id: item.id,
+            link: item.link,
+            title: item.title,
+            rating: parseFloat(item.rating) ? parseFloat(item.rating) : 0,
+            description: item.description,
+            level: parseFloat(item.level),
+            image: item.image,
+          }),
+        );
+
+        await this.databaseService.course.createMany({ data: courses });
+      },
+      skipEmptyLines: true, // Skip empty lines
+    });
   }
 }

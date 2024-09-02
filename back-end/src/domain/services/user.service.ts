@@ -100,7 +100,6 @@ export class UserService {
         id: updateUserDTO.id,
         email: updateUserDTO.email,
         name: updateUserDTO.name,
-        password: updateUserDTO.password,
         skill: updateUserDTO.skill.join(';'),
         tools: updateUserDTO.tools.join(';'),
         language: updateUserDTO.language,
@@ -111,6 +110,7 @@ export class UserService {
         profilePicture: updateUserDTO.profilePictureLink,
         currentEducation: updateUserDTO.currentEducation,
         dateOfBirth: updateUserDTO.dateOfBirth,
+        filledInformation: updateUserDTO.filledInformation,
       },
       updateUserDTO.id,
     );

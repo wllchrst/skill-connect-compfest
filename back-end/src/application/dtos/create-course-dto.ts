@@ -1,6 +1,8 @@
 export interface CreateCrouseDTO {
-  courseLink: string;
-  courseName: string;
-  courseDescription: string;
-  coursePrice: number;
+  title: string;
+  description: string;
+  level: number;
+  rating: number;
+  link: string;
+  image: string;
 }

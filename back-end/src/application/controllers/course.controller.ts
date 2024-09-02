@@ -11,30 +11,42 @@ import { Course } from '@prisma/client';
 export class CourseController {
   constructor(private readonly courseService: CourseService) {}
 
-  validateCourseCreation(createCourseDTO: CreateCrouseDTO): string {
-    let message = '';
+  validateCourseCreation(course: CreateCrouseDTO): string {
+    // Validate title (required and must be a string)
+    if (typeof course.title !== 'string' || course.title.trim() === '') {
+      return 'Invalid or missing "title".';
+    }
 
+    // Validate description (required and must be a string)
     if (
-      createCourseDTO.courseDescription == null ||
-      createCourseDTO == undefined ||
-      createCourseDTO.courseLink == null ||
-      createCourseDTO.courseLink == undefined ||
-      createCourseDTO.courseName == null ||
-      createCourseDTO.courseName == undefined ||
-      createCourseDTO.coursePrice == null ||
-      createCourseDTO.coursePrice == undefined
-    )
-      message = 'Every field is required';
-    else if (createCourseDTO.courseLink == '')
-      message = 'Course Link cannot be empty';
-    else if (createCourseDTO.courseName == '')
-      message = 'Course Name cannot be empty';
-    else if (createCourseDTO.coursePrice <= 0)
-      message = 'Course price cannot be less than 0';
-    else if (createCourseDTO.courseDescription == '')
-      message = 'Course Description cannot be empty';
+      typeof course.description !== 'string' ||
+      course.description.trim() === ''
+    ) {
+      return 'Invalid or missing "description".';
+    }
 
-    return message;
+    // Validate level (required and must be a number)
+    if (typeof course.level !== 'number' || isNaN(course.level)) {
+      return 'Invalid or missing "level".';
+    }
+
+    // Validate rating (required and must be a number)
+    if (typeof course.rating !== 'number' || isNaN(course.rating)) {
+      return 'Invalid or missing "rating".';
+    }
+
+    // Validate link (required and must be a string, possibly a URL)
+    if (typeof course.link !== 'string' || course.link.trim() === '') {
+      return 'Invalid or missing "link".';
+    }
+
+    // Validate image (required and must be a string, possibly a URL)
+    if (typeof course.image !== 'string' || course.image.trim() === '') {
+      return 'Invalid or missing "image".';
+    }
+
+    // If all validations pass
+    return 'Validation successful';
   }
 
   @Get()
@@ -52,16 +64,16 @@ export class CourseController {
     return await this.courseService.createCourse(createCourseDTO);
   }
 
-  @Post('batch')
-  async createCourseBatch(@Body() createCourseDtos: CreateCrouseDTO[]) {
-    for (const createCourseDTO of createCourseDtos) {
-      const validationResult = this.validateCourseCreation(createCourseDTO);
-      if (validationResult != '')
-        return Helper.createResponse(false, validationResult, false);
-    }
+  // @Post('batch')
+  // async createCourseBatch(@Body() createCourseDtos: CreateCrouseDTO[]) {
+  //   for (const createCourseDTO of createCourseDtos) {
+  //     const validationResult = this.validateCourseCreation(createCourseDTO);
+  //     if (validationResult != '')
+  //       return Helper.createResponse(false, validationResult, false);
+  //   }
 
-    return await this.courseService.createBatch(createCourseDtos);
-  }
+  //   return await this.courseService.createBatch(createCourseDtos);
+  // }
 
   @Post('interaction')
   async createCourseInteraction(

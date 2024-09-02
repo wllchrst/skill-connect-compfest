@@ -71,11 +71,14 @@ model GroupMember {
 }
 
 model Course {
-  id                String              @id
-  courseLink        String
-  courseName        String
-  courseDescription String
-  coursePrice       Int
+  id          String @id
+  title       String
+  description String @db.VarChar(500)
+  level       Float
+  rating      Float
+  link        String
+  image       String
+
   CourseInteraction CourseInteraction[]
 }
 

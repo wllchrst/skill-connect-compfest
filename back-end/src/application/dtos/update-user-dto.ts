@@ -2,7 +2,6 @@ export interface UpdateUserDTO {
   id: string;
   name: string;
   email: string;
-  password: string;
   profilePictureLink: string;
   description: string;
   dateOfBirth: Date;
@@ -13,4 +12,5 @@ export interface UpdateUserDTO {
   interest: string[];
   learningResource: string[];
   tools: string[];
+  filledInformation: boolean;
 }

@@ -20,35 +20,13 @@ export class CourseService {
   ): Promise<IResponse<boolean>> {
     const result = await this.courseRepository.createCourse({
       id: v4(),
-      courseDescription: createCrouseDTO.courseDescription,
-      courseLink: createCrouseDTO.courseLink,
-      courseName: createCrouseDTO.courseName,
-      coursePrice: createCrouseDTO.coursePrice,
+      title: createCrouseDTO.title,
+      description: createCrouseDTO.description,
+      level: createCrouseDTO.level,
+      link: createCrouseDTO.link,
+      image: createCrouseDTO.image,
+      rating: createCrouseDTO.rating,
     });
-
-    const message = result
-      ? 'Successfully created course'
-      : 'Failed created course';
-
-    return Helper.createResponse(result, message, result);
-  }
-
-  async createBatch(createCourseDTOs: CreateCrouseDTO[]) {
-    const data: Prisma.CourseCreateInput[] = [];
-
-    for (const createCourseDTO of createCourseDTOs) {
-      const d: Prisma.CourseCreateInput = {
-        id: v4(),
-        courseDescription: createCourseDTO.courseDescription,
-        courseLink: createCourseDTO.courseLink,
-        courseName: createCourseDTO.courseName,
-        coursePrice: createCourseDTO.coursePrice,
-      };
-
-      data.push(d);
-    }
-
-    const result = await this.courseRepository.createBatchCourse(data);
 
     const message = result
       ? 'Successfully created course'

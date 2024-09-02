@@ -8,4 +8,9 @@ export class DatabaseAPIService {
   async seedUserData(): Promise<boolean> {
     return await this.databaseSeeder.seedUser();
   }
+
+  async seedCourseData(): Promise<boolean> {
+    this.databaseSeeder.seedCourse();
+    return true;
+  }
 }
