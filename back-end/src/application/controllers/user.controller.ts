@@ -3,7 +3,6 @@ import { UserService } from 'src/domain/services/user.service';
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   Patch,
@@ -63,6 +62,7 @@ export class UserController {
         skill: data.skill.split(';').filter((s) => s.trim() != ''),
         tools: data.tools.split(';').filter((s) => s.trim() != ''),
         filledInformation: data.filledInformation,
+        friends: [],
       },
       'User Informatoin',
       true,

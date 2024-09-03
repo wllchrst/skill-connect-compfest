@@ -92,6 +92,7 @@ export class UserService {
         skill: data.skill.split(';').filter((s) => s.trim() != ''),
         tools: data.tools.split(';').filter((s) => s.trim() != ''),
         filledInformation: data.filledInformation,
+        friends: [],
       });
     }
 

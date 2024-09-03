@@ -18,6 +18,8 @@ export default function useGetUserInformation() {
 
     const response = await userService.getUserInformation(userToken);
 
+    console.log(response.data);
+
     if (response.data != null) {
       setUser(response.data);
     }

@@ -75,6 +75,9 @@ export class UserRepository {
         where: {
           id: id,
         },
+        include: {
+          friends: true,
+        },
       });
 
       return user;

@@ -1,16 +1,10 @@
-import { Button } from "@/components/ui/button";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+import { IUser } from "@/app/interfaces/user-interface";
 
-function UserFriends() {
+interface I {
+  user: IUser;
+}
+
+function UserFriends({ user }: I) {
   return <></>;
 }
 
