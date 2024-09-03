@@ -69,6 +69,24 @@ class UserService extends BackendService {
     }
   }
 
+  async getFriendRecommendation(userId: string): Promise<IResponse<IUser[]>> {
+    try {
+      const response = await this.get<IResponse<IUser[]>>(
+        `user/friend-recommendation/${userId}`
+      );
+
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      return {
+        data: [],
+        message: "Something went wrong look at console",
+        success: false,
+      };
+    }
+  }
+
   async addFriend(addFriendData: IAddFriend): Promise<IResponse<boolean>> {
     const response = await this.post<IResponse<boolean>>(
       "friend",

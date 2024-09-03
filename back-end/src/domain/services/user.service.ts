@@ -8,6 +8,7 @@ import { Helper } from 'src/common/helper';
 import { UpdateUserDTO } from 'src/application/dtos/update-user-dto';
 import { AuthService } from './auth.service';
 import { ModelRepository } from '../repositories/model.repository';
+import { UserDTO } from 'src/application/dtos/user-dto';
 
 @Injectable()
 export class UserService {
@@ -69,9 +70,32 @@ export class UserService {
     return Helper.createResponse(user, message, success);
   }
 
-  async getUserRecommendation(userId: string): Promise<IResponse<User[]>> {
+  async getUserRecommendation(userId: string): Promise<IResponse<UserDTO[]>> {
     const users = await this.userRepository.getUserRecommendation(userId);
-    return Helper.createResponse(users, 'Recommended friends', true);
+    const processUser: UserDTO[] = [];
+
+    for (const data of users) {
+      processUser.push({
+        id: data.id,
+        currentEducation: data.currentEducation,
+        dateOfBirth: data.dateOfBirth,
+        description: data.description,
+        email: data.email,
+        experienceYears: data.experienceYears,
+        interest: data.interest.split(';').filter((s) => s.trim() != ''),
+        language: data.language,
+        learningResource: data.learningResource
+          .split(';')
+          .filter((s) => s.trim() != ''),
+        name: data.name,
+        profilePictureLink: data.profilePicture,
+        skill: data.skill.split(';').filter((s) => s.trim() != ''),
+        tools: data.tools.split(';').filter((s) => s.trim() != ''),
+        filledInformation: data.filledInformation,
+      });
+    }
+
+    return Helper.createResponse(processUser, 'Recommended friends', true);
   }
 
   async trainFriendRecommendation(): Promise<IResponse<boolean>> {

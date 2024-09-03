@@ -8,6 +8,7 @@ export class FriendController {
 
   @Post()
   async addFriend(@Body() addFriendDTO: AddFriendDTO) {
+    console.log(addFriendDTO);
     return await this.friendService.addFriend(addFriendDTO);
   }
 }

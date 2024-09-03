@@ -19,12 +19,10 @@ function MainPageLayout({ children }: IChildren) {
   return (
     <UserMiddleware>
       <div className={"h-screen flex justify-between gap-3 p-4 "}>
-        <div className={"w-[300px] rounded-md p-2 bg-[#212121]"}>
+        <div className={"w-1/6 rounded-md p-2 bg-[#212121]"}>
           <Navbar />
         </div>
-        <div className={" w-[100%] rounded-md p-2 bg-[#212121]"}>
-          {children}
-        </div>
+        <div className={" w-5/6 rounded-md p-2 bg-[#212121]"}>{children}</div>
       </div>
     </UserMiddleware>
   );

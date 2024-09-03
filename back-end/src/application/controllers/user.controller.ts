@@ -53,13 +53,15 @@ export class UserController {
         description: data.description,
         email: data.email,
         experienceYears: data.experienceYears,
-        interest: data.interest.split(','),
+        interest: data.interest.split(';').filter((s) => s.trim() != ''),
         language: data.language,
-        learningResource: data.learningResource.split(','),
+        learningResource: data.learningResource
+          .split(';')
+          .filter((s) => s.trim() != ''),
         name: data.name,
         profilePictureLink: data.profilePicture,
-        skill: data.skill,
-        tools: data.tools.split(','),
+        skill: data.skill.split(';').filter((s) => s.trim() != ''),
+        tools: data.tools.split(';').filter((s) => s.trim() != ''),
         filledInformation: data.filledInformation,
       },
       'User Informatoin',
@@ -94,7 +96,7 @@ export class UserController {
   @Get('friend-recommendation/:id')
   async getFriendRecommendation(
     @Param() params: any,
-  ): Promise<IResponse<User[]>> {
+  ): Promise<IResponse<UserDTO[]>> {
     const userId = params.id;
     console.log(userId);
 

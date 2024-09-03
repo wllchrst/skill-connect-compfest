@@ -22,11 +22,25 @@ export class UserRepository {
 
   async getUserRecommendation(userId: string): Promise<User[]> {
     try {
+      const userInformation = await this.databaseService.user.findFirst({
+        where: {
+          id: userId,
+        },
+        include: {
+          friends: true,
+        },
+      });
+
+      const userFriendsIds: string[] = userInformation.friends.map(
+        (user) => user.friendId,
+      );
       const friendIds =
         await this.modelRepository.getFriendRecommendationList(userId);
 
       const users = await this.databaseService.user.findMany({
-        where: { id: { in: friendIds } },
+        where: {
+          AND: [{ id: { in: friendIds } }, { id: { notIn: userFriendsIds } }],
+        },
       });
 
       return users;

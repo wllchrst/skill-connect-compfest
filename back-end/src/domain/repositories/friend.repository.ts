@@ -17,15 +17,15 @@ export class FriendRepository {
   }
 
   async isAlreadyFriend(userId: string, friendId: string): Promise<boolean> {
-    console.log('is already friend');
     try {
-      const user = await this.databaseService.friend.findFirst({
+      const friendInformation = await this.databaseService.friend.findFirst({
         where: {
           userId: userId,
           friendId: friendId,
         },
       });
-      if (user == null || user == undefined) return false;
+      if (friendInformation == null || friendInformation == undefined)
+        return false;
       return true;
     } catch (error) {
       console.error(error);
