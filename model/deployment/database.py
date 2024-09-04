@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, text
 import pandas as pd
 
 # Create a database engine
-engine = create_engine("mysql+mysqlconnector://root:@localhost/skill-connect-compfest")
+engine = create_engine("mysql+mysqlconnector://root:password@localhost/skill-connect-compfest")
 
 def get_user_data():
     # Query to fetch data

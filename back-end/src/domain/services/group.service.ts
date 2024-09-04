@@ -15,6 +15,25 @@ export class GroupService {
     private readonly userRepository: UserRepository,
   ) {}
 
+  async getGroupRecommendation(userId: string): Promise<IResponse<Group[]>> {
+    const userExists = await this.userRepository.userExists(userId);
+
+    if (!userExists) {
+      const message = `User with the id ${userId} does not exists`;
+      return Helper.createResponse([], message, false);
+    }
+
+    const recommendedGroups =
+      await this.groupRepository.getGroupRecommendation(userId);
+    if (recommendedGroups.length <= 20) {
+      const allGroup = await this.groupRepository.getAllGroup();
+      const deficit = 20 - recommendedGroups.length;
+      recommendedGroups.concat(allGroup.slice(0, deficit));
+    }
+
+    return Helper.createResponse(recommendedGroups, 'Recommended Groups', true);
+  }
+
   async getAllGroup(): Promise<IResponse<Group[]>> {
     const groups = await this.groupRepository.getAllGroup();
     return Helper.createResponse(groups, '', true);
@@ -22,16 +41,17 @@ export class GroupService {
 
   async createGroup(
     createGroupDTO: CreateGroupDTO,
-  ): Promise<IResponse<boolean>> {
+  ): Promise<IResponse<Group | null>> {
     const result = await this.groupRepository.createGroup({
       id: v4(),
       groupName: createGroupDTO.groupName,
       description: createGroupDTO.description,
     });
 
-    const message = result ? 'Success creating group' : 'Failed creating group';
+    const message =
+      result != null ? 'Success creating group' : 'Failed creating group';
 
-    return Helper.createResponse(result, message, result);
+    return Helper.createResponse(result, message, result != null);
   }
 
   async addGroupMember(

@@ -1,0 +1,27 @@
+How to run the application
+
+Front End
+
+- npm install
+- make sure there is an env files going towards the backend
+- npm run dev
+
+Backend
+
+- npm install
+- make sure there is an env file like the env example file
+- make sure the database server is on
+- npx prisma migrate dev
+- npm start
+
+Model Backend
+
+- make sure all libraries that are needed for the python is installed
+- uvicorn app:app in the directory of deployment
+
+requirements so that everything works properly
+
+- seed the user by making a http request to the backend "database/user"
+- seed the course by making a http request to the backend "database/course"
+- train the model for friend recommendation so its up to date to the database.
+

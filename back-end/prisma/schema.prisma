@@ -55,7 +55,7 @@ model Friend {
 model Group {
   id          String   @id
   groupName   String
-  description String   @default("")
+  description String   @default("") @db.VarChar(500)
   createdAt   DateTime @default(now())
 
   members   GroupMember[]

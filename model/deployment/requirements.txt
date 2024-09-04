@@ -1,0 +1,9 @@
+uvicorn
+scikit-learn
+numpy
+pandas
+fastapi
+sqlalchemy
+mysql-connector-python
+fuzzywuzzy
+python-Levenshtein

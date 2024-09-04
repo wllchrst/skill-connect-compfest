@@ -1,18 +1,44 @@
 import { Injectable } from '@nestjs/common';
 import { Group, Prisma } from '@prisma/client';
 import { DatabaseService } from 'src/infrastructure/database/database.service';
+import { ModelRepository } from './model.repository';
 
 @Injectable()
 export class GroupRepository {
-  constructor(private readonly databaseService: DatabaseService) {}
-  async createGroup(data: Prisma.GroupCreateInput): Promise<boolean> {
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly modelRepository: ModelRepository,
+  ) {}
+  async createGroup(data: Prisma.GroupCreateInput): Promise<Group | null> {
     try {
       await this.databaseService.group.create({ data });
-      return true;
+      const group = await this.databaseService.group.findFirst({
+        where: {
+          id: data.id,
+        },
+      });
+      return group;
     } catch (error) {
       console.error(error);
-      return false;
+      return null;
     }
+  }
+
+  async getGroupRecommendation(userId: string): Promise<Group[]> {
+    const userIds =
+      await this.modelRepository.getFriendRecommendationList(userId);
+
+    // find group that has this user ids
+
+    const groups = await this.databaseService.group.findMany({
+      where: {
+        members: {
+          every: { userId: { in: userIds } },
+        },
+      },
+    });
+
+    return groups;
   }
 
   async getAllGroup(): Promise<Group[]> {

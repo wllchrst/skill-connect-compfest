@@ -1,8 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateGroupDTO } from '../dtos/create-group.dto';
 import { Helper } from 'src/common/helper';
 import { GroupService } from 'src/domain/services/group.service';
 import { CreateGroupMemberDTO } from '../dtos/create-group-member.dto';
+import { IResponse } from '../interfaces/response-interface';
+import { Group } from '@prisma/client';
 
 @Controller('group')
 export class GroupController {
@@ -10,6 +12,22 @@ export class GroupController {
   @Get()
   async getAllGroup() {
     return this.groupService.getAllGroup();
+  }
+
+  @Get('recommendation/:userId')
+  async getGroupRecommendation(
+    @Param() params: any,
+  ): Promise<IResponse<Group[]>> {
+    const userId = params.userId;
+
+    if (userId == undefined || userId == null || userId == '')
+      return Helper.createResponse(
+        [],
+        'User id is required to find recommendation',
+        false,
+      );
+
+    return await this.groupService.getGroupRecommendation(userId);
   }
 
   @Post()

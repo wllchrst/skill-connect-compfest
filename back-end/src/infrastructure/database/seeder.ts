@@ -123,6 +123,24 @@ export class DatabaseSeeder {
     }
   }
 
+  async seedGroup() {
+    const amount = 20;
+
+    const groups: Prisma.GroupCreateInput[] = [];
+
+    for (let i = 0; i < amount; i++) {
+      const groupInput: Prisma.GroupCreateInput = {
+        id: faker.string.uuid(),
+        groupName: faker.company.name(),
+        description: faker.company.catchPhrase(),
+      };
+
+      groups.push(groupInput);
+    }
+
+    await this.databaseService.group.createMany({ data: groups });
+  }
+
   async seedCourse() {
     // Read the CSV file
     const csvFile = fs.readFileSync(
@@ -130,7 +148,7 @@ export class DatabaseSeeder {
       'utf8',
     );
 
-    const BATCH_SIZE = 1000
+    const BATCH_SIZE = 1000;
 
     // Parse the CSV file
     Papa.parse(csvFile, {
