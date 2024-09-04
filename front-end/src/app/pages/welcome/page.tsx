@@ -1,6 +1,7 @@
 "use client";
 
 import ToastBuilder from "@/app/builder/toast-builder";
+import WelcomeCheckbox from "@/app/components/welcome/checkbox";
 import { useUserContext } from "@/app/contexts/user-context";
 import { educationTypes } from "@/app/data/education-data-types";
 import {
@@ -14,7 +15,17 @@ import { IUser } from "@/app/interfaces/user-interface";
 import LandingPageLayout from "@/app/layout/landing-page-layout";
 import UserService from "@/app/service/user-service";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -24,10 +35,13 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 import { SelectValue } from "@radix-ui/react-select";
+import { formToJSON } from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import Vertical from "../../components/welcome/vertical";
 
 function validateData(user: IUser): string {
   if (
@@ -49,8 +63,12 @@ const userService = UserService.getInstance();
 
 function WelcomePage() {
   const [imageLink, setImageLink] = useState<string>("");
+  const [componentState, setComponentState] = useState<"first" | "second">(
+    "first"
+  );
   const { user } = useUserContext();
-  const { register, handleSubmit } = useForm<IUser>();
+  const form = useForm<IUser>();
+  const register = form.register;
   const toast = new ToastBuilder("Welcome Page");
   const router = useRouter();
 
@@ -70,10 +88,8 @@ function WelcomePage() {
           toast.normal("Information updated successfully");
           router.push("/pages/home");
         }
-      })
-    } catch (error) {
-
-    }
+      });
+    } catch (error) {}
   };
 
   return (
@@ -84,116 +100,108 @@ function WelcomePage() {
           To improve the quality of your experience while using the website,
           please fill in some information.
         </h3>
-        <form className="flex flex-col gap-3" onSubmit={handleSubmit(submitHandler)}>
-          <Input
-            placeholder="Image"
-            onChange={async (e) => {
-              const file = e.target.files![0];
-              if (file) setImageLink(await postImage(file));
-            }}
-            type="file"
-          />
-          <Textarea
-            placeholder="Describe yourself.."
-            {...register("description")}
-          />
-          <Input
-            placeholder="Date of Birth"
-            type="date"
-            {...register("dateOfBirth")}
-          />
-          <Select {...register("language")}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a language.." />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Language</SelectLabel>
-                {humanLanguages.map((language, index) => (
-                  <SelectItem key={index} value={language}>
-                    {language}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <Select {...register("skill")}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a skill.." />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Skill</SelectLabel>
+        <form onSubmit={form.handleSubmit(submitHandler)}>
+          <div
+            className={`flex flex-col gap-3 ${
+              componentState !== "first" ? "hidden" : ""
+            }`}
+          >
+            <Input
+              placeholder="Image"
+              onChange={async (e) => {
+                const file = e.target.files![0];
+                if (file) setImageLink(await postImage(file));
+              }}
+              type="file"
+            />
+            <Textarea
+              placeholder="Describe yourself.."
+              {...register("description")}
+            />
+            <Input
+              placeholder="Date of birth"
+              type="date"
+              {...register("dateOfBirth")}
+            />
+            <Select {...register("language")}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select a language.." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Language</SelectLabel>
+                  {humanLanguages.map((language, index) => (
+                    <SelectItem key={index} value={language}>
+                      {language}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <Select {...register("currentEducation")}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select current education.." />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Education</SelectLabel>
+                  {educationTypes.map((education, index) => (
+                    <SelectItem key={index} value={education}>
+                      {education}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+            <Input placeholder="Experience in year(s)" type="number" />
+            <Button type="button" onClick={() => setComponentState("second")}>
+              Next
+            </Button>
+          </div>
+          <div
+            className={`flex flex-col gap-3 w-full ${
+              componentState !== "second" ? "hidden" : ""
+            }`}
+          >
+            <Vertical>
+              <Label className="text-lg font-semibold">Skills</Label>
+              <div className="flex flex-wrap gap-2">
                 {interestType.map((skill, index) => (
-                  <SelectItem key={index} value={skill}>
-                    {skill}
-                  </SelectItem>
+                  <WelcomeCheckbox label={skill} key={index} />
                 ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <Select {...register("currentEducation")}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select current education.." />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Education</SelectLabel>
-                {educationTypes.map((education, index) => (
-                  <SelectItem key={index} value={education}>
-                    {education}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <Input placeholder="Experience in year(s)" type="number" />
-          <Select {...register("interest")}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select an interest.." />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Interest</SelectLabel>
+              </div>
+            </Vertical>
+            <Vertical>
+              <Label className="text-lg font-semibold">Interests</Label>
+              <div className="flex flex-wrap gap-2">
                 {interestType.map((interest, index) => (
-                  <SelectItem key={index} value={interest}>
-                    {interest}
-                  </SelectItem>
+                  <WelcomeCheckbox label={interest} key={index} />
                 ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <Select {...register("learningResource")}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a learning resource.." />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Learning Resource</SelectLabel>
+              </div>
+            </Vertical>
+            <Vertical>
+              <Label className="text-lg font-semibold">Learning Resources</Label>
+              <div className="flex flex-wrap gap-2">
                 {learningResources.map((resource, index) => (
-                  <SelectItem key={index} value={resource}>
-                    {resource}
-                  </SelectItem>
+                  <WelcomeCheckbox label={resource} key={index} />
                 ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <Select {...register("tools")}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select a tool.." />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Tools</SelectLabel>
+              </div>
+            </Vertical>
+            <Vertical>
+              <Label className="text-lg font-semibold">Tools</Label>
+              <div className="flex flex-wrap gap-2">
                 {toolTypes.map((tool, index) => (
-                  <SelectItem key={index} value={tool}>
-                    {tool}
-                  </SelectItem>
+                  <WelcomeCheckbox label={tool} key={index} />
                 ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-          <Button type="submit">Submit</Button>
+              </div>
+            </Vertical>
+            <div className="flex gap-2 w-full">
+              <Button type="button" onClick={() => setComponentState("first")}>
+                Back
+              </Button>
+              <Button type="submit">Submit</Button>
+            </div>
+          </div>
         </form>
       </div>
     </LandingPageLayout>
