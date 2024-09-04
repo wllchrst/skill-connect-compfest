@@ -14,7 +14,7 @@ function MainPageLayout({ children }: IChildren) {
   const router = useRouter();
 
   if (isLoading) return <Loading />;
-  else if(user == null) router.push('/pages/login')
+  else if (user == null) router.push("/pages/login");
   else if (!user.filledInformation) router.push("/pages/welcome");
 
   return (
@@ -25,7 +25,7 @@ function MainPageLayout({ children }: IChildren) {
         </div>
         <div
           className={
-            " w-5/6 rounded-md p-2 bg-[#212121] overflow-x-auto scrollbar-thin scrollbar-thumb-white scrollbar-track-transparent"
+            " w-5/6 rounded-md bg-[#212121] overflow-x-auto scrollbar-thin scrollbar-thumb-white scrollbar-track-transparent"
           }
         >
           {children}
