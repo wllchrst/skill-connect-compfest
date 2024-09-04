@@ -15,5 +15,5 @@ export interface UserDTO {
   learningResource: string[];
   tools: string[];
   filledInformation: boolean;
-  friends: UserDTO[];
+  friends: User[];
 }

@@ -20,6 +20,31 @@ export class UserRepository {
     }
   }
 
+  async getUserFriends(userId: string) {
+    try {
+      const userFriendsData = await this.databaseService.friend.findMany({
+        where: {
+          userId: userId,
+        },
+      });
+
+      const friendIds = userFriendsData.map((f) => f.friendId);
+
+      const userFriends = await this.databaseService.user.findMany({
+        where: {
+          id: {
+            in: friendIds,
+          },
+        },
+      });
+
+      return userFriends;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
+
   async getUserRecommendation(userId: string): Promise<User[]> {
     try {
       const userInformation = await this.databaseService.user.findFirst({

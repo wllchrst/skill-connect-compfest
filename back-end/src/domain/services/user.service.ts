@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserRepository } from '../repositories/user.repository';
 import { CreateUserDTO } from 'src/application/dtos/create-user.dto';
 import { v4 } from 'uuid';
@@ -6,7 +6,6 @@ import { IResponse } from 'src/application/interfaces/response-interface';
 import { User } from '@prisma/client';
 import { Helper } from 'src/common/helper';
 import { UpdateUserDTO } from 'src/application/dtos/update-user-dto';
-import { AuthService } from './auth.service';
 import { ModelRepository } from '../repositories/model.repository';
 import { UserDTO } from 'src/application/dtos/user-dto';
 
@@ -48,6 +47,12 @@ export class UserService {
       : 'Success creating User';
 
     return Helper.createResponse(createResult, message, createResult);
+  }
+
+  async getUserFriends(userId: string): Promise<IResponse<User[]>> {
+    const friends = await this.userRepository.getUserFriends(userId);
+
+    return Helper.createResponse(friends, 'All user friends', true);
   }
 
   async getUserById(id: string): Promise<IResponse<User>> {

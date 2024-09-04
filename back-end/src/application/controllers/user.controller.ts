@@ -40,33 +40,33 @@ export class UserController {
     if (userPayload == undefined || userPayload == null)
       return Helper.createResponse(null, 'Something went wrong', false);
 
-    const { data } = await this.userService.getUserById(userPayload.id);
+    var { data } = await this.userService.getUserById(userPayload.id);
     if (data == null)
       return Helper.createResponse(null, 'User was not found', false);
 
-    return Helper.createResponse(
-      {
-        id: data.id,
-        currentEducation: data.currentEducation,
-        dateOfBirth: data.dateOfBirth,
-        description: data.description,
-        email: data.email,
-        experienceYears: data.experienceYears,
-        interest: data.interest.split(';').filter((s) => s.trim() != ''),
-        language: data.language,
-        learningResource: data.learningResource
-          .split(';')
-          .filter((s) => s.trim() != ''),
-        name: data.name,
-        profilePictureLink: data.profilePicture,
-        skill: data.skill.split(';').filter((s) => s.trim() != ''),
-        tools: data.tools.split(';').filter((s) => s.trim() != ''),
-        filledInformation: data.filledInformation,
-        friends: [],
-      },
-      'User Informatoin',
-      true,
-    );
+    const friends = await this.userService.getUserFriends(data.id);
+
+    const userDTO: UserDTO = {
+      id: data.id,
+      currentEducation: data.currentEducation,
+      dateOfBirth: data.dateOfBirth,
+      description: data.description,
+      email: data.email,
+      experienceYears: data.experienceYears,
+      interest: data.interest.split(';').filter((s) => s.trim() != ''),
+      language: data.language,
+      learningResource: data.learningResource
+        .split(';')
+        .filter((s) => s.trim() != ''),
+      name: data.name,
+      profilePictureLink: data.profilePicture,
+      skill: data.skill.split(';').filter((s) => s.trim() != ''),
+      tools: data.tools.split(';').filter((s) => s.trim() != ''),
+      filledInformation: data.filledInformation,
+      friends: friends.data,
+    };
+
+    return Helper.createResponse(userDTO, 'User Informatoin', true);
   }
 
   @Post()
