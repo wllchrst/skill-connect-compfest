@@ -7,12 +7,14 @@ import { IResponse } from 'src/application/interfaces/response-interface';
 import { Helper } from 'src/common/helper';
 import { Course, Prisma } from '@prisma/client';
 import { UserRepository } from '../repositories/user.repository';
+import { ModelRepository } from '../repositories/model.repository';
 
 @Injectable()
 export class CourseService {
   constructor(
     private readonly courseRepository: CourseRepository,
     private readonly userRepository: UserRepository,
+    private readonly modelRepository: ModelRepository,
   ) {}
 
   async createCourse(
@@ -84,5 +86,26 @@ export class CourseService {
   async getAllCourse(): Promise<IResponse<Course[]>> {
     const courses = await this.courseRepository.getAllCourse();
     return Helper.createResponse(courses, 'All Course', true);
+  }
+
+  async getCourseRecommendation(userId: string): Promise<IResponse<Course[]>> {
+    const userExists = await this.userRepository.userExists(userId);
+
+    if (!userExists)
+      return Helper.createResponse(
+        [],
+        "User doesn't exist in our database",
+        false,
+      );
+
+    const courses = await this.courseRepository.getCourseRecommendation(userId);
+
+    return Helper.createResponse(courses, 'Course Recommendation', true);
+  }
+
+  async searchCourse(query: string): Promise<IResponse<Course[]>> {
+    const courses = await this.courseRepository.searchCourse(query);
+
+    return Helper.createResponse(courses, 'Course Searching', true);
   }
 }

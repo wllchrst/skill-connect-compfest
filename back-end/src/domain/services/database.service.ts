@@ -10,7 +10,7 @@ export class DatabaseAPIService {
   }
 
   async seedCourseData(): Promise<boolean> {
-    this.databaseSeeder.seedCourse();
+    await this.databaseSeeder.seedCourse();
     return true;
   }
 }

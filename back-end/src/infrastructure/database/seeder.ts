@@ -130,24 +130,48 @@ export class DatabaseSeeder {
       'utf8',
     );
 
+    const BATCH_SIZE = 1000
+
     // Parse the CSV file
     Papa.parse(csvFile, {
       header: true, // Assumes the CSV has headers
       complete: async (results) => {
         // Convert the parsed data to the Course type
-        const courses: Prisma.CourseCreateManyInput = results.data.map(
+        const courses: Prisma.CourseCreateInput[] = results.data.map(
           (item: any) => ({
             id: item.id,
             link: item.link,
             title: item.title,
             rating: parseFloat(item.rating) ? parseFloat(item.rating) : 0,
-            description: item.description,
+            description: '', //item.description,
             level: parseFloat(item.level),
             image: item.image,
           }),
         );
 
-        await this.databaseService.course.createMany({ data: courses });
+        // Function to handle batch creation
+        const batchInsert = async (courses: Prisma.CourseCreateInput[]) => {
+          for (let i = 0; i < courses.length; i += BATCH_SIZE) {
+            const batch = courses.slice(i, i + BATCH_SIZE);
+            try {
+              await this.databaseService.course.createMany({
+                data: batch,
+              });
+            } catch (error) {
+              console.error(
+                `Error inserting batch starting at index ${i}`,
+                error,
+              );
+            }
+          }
+        };
+
+        try {
+          await batchInsert(courses);
+          console.log('All batches inserted successfully');
+        } catch (error) {
+          console.error('Failed to insert all batches:', error);
+        }
       },
       skipEmptyLines: true, // Skip empty lines
     });

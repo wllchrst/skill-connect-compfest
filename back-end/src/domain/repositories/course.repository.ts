@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Course, Prisma } from '@prisma/client';
 import { DatabaseService } from 'src/infrastructure/database/database.service';
+import { ModelRepository } from './model.repository';
 
 @Injectable()
 export class CourseRepository {
-  constructor(private readonly databaseService: DatabaseService) {}
+  constructor(
+    private readonly databaseService: DatabaseService,
+    private readonly modelRepository: ModelRepository,
+  ) {}
 
   async createCourse(data: Prisma.CourseCreateInput): Promise<boolean> {
     try {
@@ -80,6 +84,45 @@ export class CourseRepository {
     } catch (error) {
       console.error(error);
       return false;
+    }
+  }
+
+  async getCourseRecommendation(userId: string): Promise<Course[]> {
+    try {
+      const courseIds =
+        await this.modelRepository.getCourseRecommendation(userId);
+
+      const ids = courseIds.slice(0, 100);
+
+      const courses = await this.databaseService.course.findMany({
+        where: {
+          id: { in: ids },
+        },
+      });
+
+      return courses;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
+
+  async searchCourse(query: string): Promise<Course[]> {
+    try {
+      const courseIds = await this.modelRepository.searchCourse(query);
+
+      const courses = await this.databaseService.course.findMany({
+        where: {
+          id: { in: courseIds },
+        },
+      });
+
+      console.log(courses);
+
+      return courses;
+    } catch (error) {
+      console.error(error);
+      return [];
     }
   }
 }

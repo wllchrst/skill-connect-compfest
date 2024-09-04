@@ -1,6 +1,6 @@
 import { CourseInteractionType } from './../enumerations/interaction-type.enum';
 import { CreateCourseInteractionDTO } from './../dtos/create-course-interface-dto';
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateCrouseDTO } from '../dtos/create-course-dto';
 import { CourseService } from 'src/domain/services/course.service';
 import { Helper } from 'src/common/helper';
@@ -62,6 +62,33 @@ export class CourseController {
       return Helper.createResponse(false, validationResult, false);
 
     return await this.courseService.createCourse(createCourseDTO);
+  }
+
+  @Get('course-recommendation/:userId')
+  async getCourseRecommendation(
+    @Param() params: any,
+  ): Promise<IResponse<Course[]>> {
+    const userId = params.userId;
+    console.log(userId);
+
+    if (userId == undefined)
+      return Helper.createResponse([], 'User id cannot be undefined', false);
+
+    return await this.courseService.getCourseRecommendation(userId);
+  }
+
+  @Get('search-course/:query')
+  async searchCourse(@Param() params: any) {
+    const query = params.query;
+
+    if (query == undefined)
+      return Helper.createResponse(
+        [],
+        'Search query cannot be undefined',
+        false,
+      );
+
+    return await this.courseService.searchCourse(query);
   }
 
   // @Post('batch')
