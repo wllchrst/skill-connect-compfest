@@ -70,3 +70,5 @@ def training_friend_recommendation():
     with open(pathname + 'mlb_tools.pkl', 'wb') as mlb_tools_file:
         pickle.dump(mlb_tools, mlb_tools_file)
     
+def training_course_recommendation(): 
+    pass
