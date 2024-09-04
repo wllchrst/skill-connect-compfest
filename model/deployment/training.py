@@ -1,6 +1,8 @@
 import pandas as pd
 from sklearn.preprocessing import OneHotEncoder, MultiLabelBinarizer
 from sklearn.neighbors import NearestNeighbors
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 from database import get_user_data
 import numpy as np
 import pickle
@@ -70,5 +72,4 @@ def training_friend_recommendation():
     with open(pathname + 'mlb_tools.pkl', 'wb') as mlb_tools_file:
         pickle.dump(mlb_tools, mlb_tools_file)
     
-def training_course_recommendation(): 
-    pass
+

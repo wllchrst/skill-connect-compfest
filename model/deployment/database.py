@@ -12,7 +12,7 @@ def get_user_data():
     df = pd.read_sql(query, engine)
     return df
 
-def get_user_by_id(userId):
+def get_user_by_id(userId: str):
     with engine.connect() as connection: 
         connection = engine.connect()
         query = text("SELECT * FROM User WHERE Id LIKE :userId")
