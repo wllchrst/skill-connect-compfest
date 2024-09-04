@@ -1,7 +1,9 @@
 import ToastBuilder from "@/app/builder/toast-builder";
 import { useUserContext } from "@/app/contexts/user-context";
 import { login_path } from "@/app/data/page-paths";
+import { getFirstTwoInitials } from "@/app/helpers/helper";
 import UserService from "@/app/service/user-service";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -31,14 +33,10 @@ function ProfileNavbar() {
       onMouseLeave={() => setDivHovering(false)}
     >
       <div className="flex items-center gap-4">
-        <div className="w-10 h-10 object-cover rounded-md overflow-hidden">
-          <Image
-            src={user.profilePictureLink}
-            alt=""
-            width={100}
-            height={100}
-          />
-        </div>
+        <Avatar className="flex-shrink-0">
+          <AvatarImage src={user.profilePictureLink} alt={user.name} />
+          <AvatarFallback>{getFirstTwoInitials(user.name)}</AvatarFallback>
+        </Avatar>
         <div>
           <h3
             className={"scroll-m-20 text-1xl font-semibold tracking-tight m-0 "}

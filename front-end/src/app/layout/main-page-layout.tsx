@@ -13,7 +13,8 @@ function MainPageLayout({ children }: IChildren) {
   const { isLoading } = useGetUserInformation();
   const router = useRouter();
 
-  if (isLoading && user == null) return <Loading />;
+  if (isLoading) return <Loading />;
+  else if(user == null) router.push('/pages/login')
   else if (!user.filledInformation) router.push("/pages/welcome");
 
   return (
@@ -22,7 +23,13 @@ function MainPageLayout({ children }: IChildren) {
         <div className={"w-1/6 rounded-md p-2 bg-[#212121]"}>
           <Navbar />
         </div>
-        <div className={" w-5/6 rounded-md p-2 bg-[#212121]"}>{children}</div>
+        <div
+          className={
+            " w-5/6 rounded-md p-2 bg-[#212121] overflow-x-auto scrollbar-thin scrollbar-thumb-white scrollbar-track-transparent"
+          }
+        >
+          {children}
+        </div>
       </div>
     </UserMiddleware>
   );

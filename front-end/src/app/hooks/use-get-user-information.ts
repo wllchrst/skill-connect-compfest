@@ -11,6 +11,7 @@ export default function useGetUserInformation() {
   const userToken = Cookies.get(userTokenKey);
 
   async function fetchUserInformation() {
+    console.log("getting user information")
     if (userToken == undefined || userToken == null) {
       setIsLoading(false);
       return;

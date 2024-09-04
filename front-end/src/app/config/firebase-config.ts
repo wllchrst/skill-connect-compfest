@@ -21,7 +21,6 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
 const userCollection = collection(db, "users");
 const projectCollection = collection(db, "projects");
@@ -33,7 +32,6 @@ const chatFriendCollection = collection(db, "chat_friend");
 const analytics = getAnalytics(app);
 export {
   app,
-  auth,
   db,
   userCollection,
   projectCollection,
