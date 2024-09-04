@@ -20,7 +20,7 @@ function CommunityFriend() {
       </blockquote>
       <div className="flex gap-2 mt-2 items-center overflow-y-auto scrollbar-thin scrollbar-thumb-white scrollbar-track-transparent pb-2">
         {user.friends.map((value, index) => (
-          <FriendCard user={value} key={index} isFriend={true} />
+          <FriendCard friend={value} key={index} isFriend={true} />
         ))}
       </div>
       <blockquote className="mt-6 border-l-2 pl-6 italic">
@@ -28,7 +28,7 @@ function CommunityFriend() {
       </blockquote>
       <div className="flex gap-2 mt-2 items-center overflow-y-auto scrollbar-thin scrollbar-thumb-white scrollbar-track-transparent pb-2">
         {userRecommendation.map((user, index) => (
-          <FriendCard user={user} key={index} isFriend={false} />
+          <FriendCard friend={user} key={index} isFriend={false} />
         ))}
       </div>
     </div>

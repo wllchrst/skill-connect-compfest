@@ -1,8 +1,14 @@
-import { DocumentData, onSnapshot, Query } from "firebase/firestore";
+import {
+  addDoc,
+  CollectionReference,
+  DocumentData,
+  onSnapshot,
+  Query,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 
-export default class FetchHelper<T> {
-  getOne(query: Query<DocumentData, DocumentData>): {
+export default class FirebaseHelper {
+  getOne<T>(query: Query<DocumentData, DocumentData>): {
     data: T | null;
     isLoading: boolean;
   } {
@@ -35,7 +41,20 @@ export default class FetchHelper<T> {
     return { data, isLoading };
   }
 
-  getAll(query: Query<DocumentData, DocumentData>): {
+  async create<T>(
+    collection: CollectionReference<unknown, DocumentData>,
+    data: T
+  ): Promise<boolean> {
+    try {
+      await addDoc(collection, data);
+      return true;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
+
+  getAll<T>(query: Query<DocumentData, DocumentData>): {
     data: T[];
     isLoading: boolean;
   } {
@@ -46,6 +65,7 @@ export default class FetchHelper<T> {
       try {
         const unsubscribe = onSnapshot(query, (snapshot) => {
           if (snapshot.docs[0] != undefined) {
+            console.log(snapshot.docs);
             setData(snapshot.docs.map((doc) => doc.data()) as T[]);
             setIsLoading(false);
           } else {

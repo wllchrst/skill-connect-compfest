@@ -28,6 +28,7 @@ const projectCollection = collection(db, "projects");
 const storage = getStorage(app);
 const partnerChatCollection = collection(db, "chat_partner");
 const jobChatCollection = collection(db, "chat_job");
+const chatFriendCollection = collection(db, "chat_friend");
 
 const analytics = getAnalytics(app);
 export {
@@ -39,4 +40,5 @@ export {
   storage,
   partnerChatCollection,
   jobChatCollection,
+  chatFriendCollection,
 };

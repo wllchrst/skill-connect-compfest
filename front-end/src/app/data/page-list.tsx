@@ -3,20 +3,14 @@ import { IoHomeOutline } from "react-icons/io5";
 import { IoHomeSharp } from "react-icons/io5";
 import {
   IoPeopleOutline,
-  IoSearchOutline,
-  IoSearchSharp,
+  IoBookOutline,
+  IoBookSharp,
   IoPersonOutline,
   IoPersonSharp,
 } from "react-icons/io5";
 import { IoPeopleSharp } from "react-icons/io5";
 
 const pageList: IPage[] = [
-  {
-    name: "Search",
-    icon: <IoSearchOutline size={20} />,
-    iconActive: <IoSearchSharp size={20} />,
-    path: "/pages/search",
-  },
   {
     name: "Home",
     icon: <IoHomeOutline size={20} />,
@@ -28,6 +22,12 @@ const pageList: IPage[] = [
     icon: <IoPeopleOutline size={20} />,
     iconActive: <IoPeopleSharp size={20} />,
     path: "/pages/community",
+  },
+  {
+    name: "Course",
+    icon: <IoBookOutline size={20} />,
+    iconActive: <IoBookSharp size={20} />,
+    path: "/pages/course",
   },
   {
     name: "Profile",

@@ -7,9 +7,15 @@ import { AxiosRequestConfig } from "axios";
 import Cookies from "js-cookie";
 import { userTokenKey } from "../data/web-contant";
 import { IAddFriend } from "../interfaces/add-friend-interface";
+import FirebaseHelper from "../helpers/firebase-helper";
+import { IChat } from "../interfaces/chat-interface";
+import { v4 } from "uuid";
+import { Timestamp } from "firebase/firestore";
+import { chatFriendCollection } from "../config/firebase-config";
 
 class UserService extends BackendService {
   static instance: UserService | null = null;
+  firebaseHelper: FirebaseHelper = new FirebaseHelper();
 
   constructor() {
     super();
@@ -52,6 +58,27 @@ class UserService extends BackendService {
     );
 
     return response.data;
+  }
+
+  async chatFriend(userId: string, friendId: string, message: string) {
+    try {
+      const chatData: IChat = {
+        id: v4(),
+        message: message,
+        receiverId: friendId,
+        senderId: userId,
+        timestamp: Timestamp.fromDate(new Date()),
+      };
+
+      const result = await this.firebaseHelper.create<IChat>(
+        chatFriendCollection,
+        chatData
+      );
+      return result;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
   }
 
   async updateUserInformation(user: IUser): Promise<IResponse<boolean>> {
