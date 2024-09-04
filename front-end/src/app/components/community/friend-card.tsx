@@ -6,10 +6,10 @@ import { getFirstTwoInitials } from "@/app/helpers/helper";
 import { IUser } from "@/app/interfaces/user-interface";
 import UserService from "@/app/service/user-service";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 interface I {
   user: IUser;
+  isFriend: boolean;
 }
 import {
   Dialog,
@@ -20,10 +20,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import UserProfile from "./user-profile";
+import FriendProfile from "./friend-profile";
 
 const userService = new UserService();
 
-export function FriendCard({ user }: I) {
+export function FriendCard({ user, isFriend }: I) {
   const currentUserId = useUserContext().user.id;
   const toast = new ToastBuilder("Adding Friend");
 
@@ -92,26 +94,11 @@ export function FriendCard({ user }: I) {
                 : user.description}
             </DialogDescription>
           </DialogHeader>
-          <div className="flex gap-1 flex-wrap items-center">
-            <p className="leading-7 [&:not(:first-child)]:mt-6 font-bold">
-              SKILL
-            </p>
-            {user.skill.map((value, index) => (
-              <div key={index}>
-                <Badge>{value}</Badge>
-              </div>
-            ))}
-          </div>
-          <div className="flex gap-1 flex-wrap items-center">
-            <p className="leading-7 [&:not(:first-child)]:mt-6 font-bold">
-              INTEREST
-            </p>
-            {user.interest.map((value, index) => (
-              <div key={index}>
-                <Badge variant={"outline"}>{value}</Badge>
-              </div>
-            ))}
-          </div>
+          {isFriend ? (
+            <FriendProfile user={user} />
+          ) : (
+            <UserProfile user={user} />
+          )}
           <DialogFooter>
             <Button type="submit" onClick={() => addFriendHandle()}>
               Add Friend

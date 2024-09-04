@@ -46,6 +46,30 @@ export class UserController {
 
     const friends = await this.userService.getUserFriends(data.id);
 
+    const friendData: UserDTO[] = friends.data.map((data, index) => {
+      const dto: UserDTO = {
+        id: data.id,
+        currentEducation: data.currentEducation,
+        dateOfBirth: data.dateOfBirth,
+        description: data.description,
+        email: data.email,
+        experienceYears: data.experienceYears,
+        interest: data.interest.split(';').filter((s) => s.trim() != ''),
+        language: data.language,
+        learningResource: data.learningResource
+          .split(';')
+          .filter((s) => s.trim() != ''),
+        name: data.name,
+        profilePictureLink: data.profilePicture,
+        skill: data.skill.split(';').filter((s) => s.trim() != ''),
+        tools: data.tools.split(';').filter((s) => s.trim() != ''),
+        filledInformation: data.filledInformation,
+        friends: [],
+      };
+
+      return dto;
+    });
+
     const userDTO: UserDTO = {
       id: data.id,
       currentEducation: data.currentEducation,
@@ -63,7 +87,7 @@ export class UserController {
       skill: data.skill.split(';').filter((s) => s.trim() != ''),
       tools: data.tools.split(';').filter((s) => s.trim() != ''),
       filledInformation: data.filledInformation,
-      friends: friends.data,
+      friends: friendData,
     };
 
     return Helper.createResponse(userDTO, 'User Informatoin', true);

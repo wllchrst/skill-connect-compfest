@@ -1,5 +1,3 @@
-import { User } from '@prisma/client';
-
 export interface UserDTO {
   id: string;
   name: string;
@@ -15,5 +13,5 @@ export interface UserDTO {
   learningResource: string[];
   tools: string[];
   filledInformation: boolean;
-  friends: User[];
+  friends: UserDTO[];
 }

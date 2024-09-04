@@ -13,4 +13,5 @@ export interface IUser {
   learningResource: string[];
   tools: string[];
   filledInformation: boolean;
+  friends: IUser[];
 }

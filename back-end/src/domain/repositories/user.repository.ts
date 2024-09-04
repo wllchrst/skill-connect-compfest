@@ -32,9 +32,7 @@ export class UserRepository {
 
       const userFriends = await this.databaseService.user.findMany({
         where: {
-          id: {
-            in: friendIds,
-          },
+          AND: [{ id: { in: friendIds } }, { id: { not: userId } }],
         },
       });
 
