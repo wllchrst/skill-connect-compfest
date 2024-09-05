@@ -5,6 +5,7 @@ import { GroupService } from 'src/domain/services/group.service';
 import { CreateGroupMemberDTO } from '../dtos/create-group-member.dto';
 import { IResponse } from '../interfaces/response-interface';
 import { Group } from '@prisma/client';
+import { GroupDTO } from '../dtos/group-dto';
 
 @Controller('group')
 export class GroupController {
@@ -17,7 +18,7 @@ export class GroupController {
   @Get('recommendation/:userId')
   async getGroupRecommendation(
     @Param() params: any,
-  ): Promise<IResponse<Group[]>> {
+  ): Promise<IResponse<GroupDTO[]>> {
     const userId = params.userId;
 
     if (userId == undefined || userId == null || userId == '')

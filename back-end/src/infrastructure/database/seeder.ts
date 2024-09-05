@@ -125,6 +125,7 @@ export class DatabaseSeeder {
 
   async seedGroup() {
     const amount = 20;
+    const userAmount = 10;
 
     const groups: Prisma.GroupCreateInput[] = [];
 
@@ -139,6 +140,22 @@ export class DatabaseSeeder {
     }
 
     await this.databaseService.group.createMany({ data: groups });
+
+    const users = await this.databaseService.user.findMany();
+    const groupsSeeded = await this.databaseService.group.findMany();
+
+    for (const seededGroup of groupsSeeded) {
+      for (let i = 0; i < userAmount; i++) {
+        const index = Helper.getRandomNumber(0, users.length - 1);
+        await this.databaseService.groupMember.create({
+          data: {
+            id: v4(),
+            groupId: seededGroup.id,
+            userId: users[index].id,
+          },
+        });
+      }
+    }
   }
 
   async seedCourse() {

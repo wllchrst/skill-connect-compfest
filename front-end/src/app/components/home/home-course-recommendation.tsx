@@ -11,7 +11,7 @@ function HomeCourseRecommendation() {
       </h2>
       <div className="flex space-x-4 overflow-x-auto scrollbar-thin scrollbar-thumb-white scrollbar-track-transparent pb-2">
         {courses.map((course, index) => (
-          <div key={course.id} className="flex-shrink-0 w-[350px]">
+          <div key={index} className="flex-shrink-0 w-[350px]">
             {" "}
             {/* Adjust height as needed */}
             <CourseCard course={course} />

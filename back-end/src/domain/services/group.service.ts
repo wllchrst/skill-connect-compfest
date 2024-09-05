@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { GroupRepository } from '../repositories/group.repository';
 import { CreateGroupDTO } from 'src/application/dtos/create-group.dto';
 import { v4 } from 'uuid';
@@ -7,6 +7,7 @@ import { IResponse } from 'src/application/interfaces/response-interface';
 import { Group } from '@prisma/client';
 import { CreateGroupMemberDTO } from 'src/application/dtos/create-group-member.dto';
 import { UserRepository } from '../repositories/user.repository';
+import { GroupDTO } from 'src/application/dtos/group-dto';
 
 @Injectable()
 export class GroupService {
@@ -15,7 +16,7 @@ export class GroupService {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async getGroupRecommendation(userId: string): Promise<IResponse<Group[]>> {
+  async getGroupRecommendation(userId: string): Promise<IResponse<GroupDTO[]>> {
     const userExists = await this.userRepository.userExists(userId);
 
     if (!userExists) {
@@ -25,13 +26,54 @@ export class GroupService {
 
     const recommendedGroups =
       await this.groupRepository.getGroupRecommendation(userId);
-    if (recommendedGroups.length <= 20) {
-      const allGroup = await this.groupRepository.getAllGroup();
+
+    const allGroup = await this.groupRepository.getAllGroup();
+
+    if (recommendedGroups.length < 20) {
       const deficit = 20 - recommendedGroups.length;
-      recommendedGroups.concat(allGroup.slice(0, deficit));
+
+      // Filter out groups from allGroup that are not already in recommendedGroups
+      const additionalGroups = allGroup.filter(
+        (group) =>
+          !recommendedGroups.some(
+            (recommendedGroup) => recommendedGroup.id === group.id,
+          ),
+      );
+
+      // Add the required number of groups from additionalGroups to recommendedGroups
+      const groupsToAdd = additionalGroups.slice(0, deficit);
+
+      // Concatenate the additional groups
+      const finalGroups = recommendedGroups.concat(groupsToAdd);
+
+      const returnGroups: GroupDTO[] = [];
+
+      for (const group of finalGroups) {
+        returnGroups.push({
+          createdAt: group.createdAt,
+          description: group.description,
+          groupName: group.groupName,
+          id: group.id,
+          members: await this.groupRepository.getGroupMember(group.id),
+        });
+      }
+
+      return Helper.createResponse(returnGroups, 'Recommended Groups', true);
     }
 
-    return Helper.createResponse(recommendedGroups, 'Recommended Groups', true);
+    const returnGroups: GroupDTO[] = [];
+
+    for (const group of recommendedGroups) {
+      returnGroups.push({
+        createdAt: group.createdAt,
+        description: group.description,
+        groupName: group.groupName,
+        id: group.id,
+        members: await this.groupRepository.getGroupMember(group.id),
+      });
+    }
+
+    return Helper.createResponse(returnGroups, 'Recommended Groups', true);
   }
 
   async getAllGroup(): Promise<IResponse<Group[]>> {

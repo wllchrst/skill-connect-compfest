@@ -28,6 +28,7 @@ const storage = getStorage(app);
 const partnerChatCollection = collection(db, "chat_partner");
 const jobChatCollection = collection(db, "chat_job");
 const chatFriendCollection = collection(db, "chat_friend");
+const chatGroupCollection = collection(db, "chat_group");
 
 const analytics = getAnalytics(app);
 export {
@@ -39,4 +40,5 @@ export {
   partnerChatCollection,
   jobChatCollection,
   chatFriendCollection,
+  chatGroupCollection,
 };

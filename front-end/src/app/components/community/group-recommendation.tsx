@@ -13,7 +13,7 @@ function GroupRecommendation() {
       <blockquote className="border-l-2 pl-6 italic mb-4">
         Group Recommendation
       </blockquote>
-      <div className="flex gap-2 overflow-x-auto scrollbar-thin scrollbar-thumb-white scrollbar-track-transparent">
+      <div className="flex gap-2 overflow-x-auto scrollbar-thin scrollbar-thumb-white scrollbar-track-transparent pb-3">
         {groups.map((group, index) => (
           <div key={index}>
             <GroupCard group={group} />

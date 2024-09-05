@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Group, Prisma } from '@prisma/client';
+import { Group, Prisma, User } from '@prisma/client';
 import { DatabaseService } from 'src/infrastructure/database/database.service';
 import { ModelRepository } from './model.repository';
+import { GroupDTO } from 'src/application/dtos/group-dto';
 
 @Injectable()
 export class GroupRepository {
@@ -28,8 +29,6 @@ export class GroupRepository {
     const userIds =
       await this.modelRepository.getFriendRecommendationList(userId);
 
-    // find group that has this user ids
-
     const groups = await this.databaseService.group.findMany({
       where: {
         members: {
@@ -38,7 +37,24 @@ export class GroupRepository {
       },
     });
 
+    console.log(groups.length);
+
     return groups;
+  }
+
+  async getGroupMember(groupId: string): Promise<User[]> {
+    const group = await this.databaseService.group.findFirst({
+      where: { id: groupId },
+      include: {
+        members: {
+          include: { user: true },
+        },
+      },
+    });
+
+    const members = group.members.map((member, index) => member.user);
+
+    return members;
   }
 
   async getAllGroup(): Promise<Group[]> {

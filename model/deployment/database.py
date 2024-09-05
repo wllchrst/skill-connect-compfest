@@ -1,8 +1,12 @@
 from sqlalchemy import create_engine, text
 import pandas as pd
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 # Create a database engine
-engine = create_engine("mysql+mysqlconnector://root:password@localhost/skill-connect-compfest")
+engine = create_engine(os.getenv("CONNECTION_STRING"))
 
 def get_user_data():
     # Query to fetch data
