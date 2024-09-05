@@ -66,6 +66,12 @@ function WelcomePage() {
   const [componentState, setComponentState] = useState<"first" | "second">(
     "first"
   );
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
+  const [selectedLearningResources, setSelectedLearningResources] = useState<
+    string[]
+  >([]);
+  const [selectedTools, setSelectedTools] = useState<string[]>([]);
   const { user } = useUserContext();
   const form = useForm<IUser>();
   const register = form.register;
@@ -74,8 +80,55 @@ function WelcomePage() {
 
   // if (user.filledInformation) router.push("/pages/home");
 
+  const handleSkillChange = (skill: string, isChecked: boolean) => {
+    if (isChecked) {
+      setSelectedSkills([...selectedSkills, skill]);
+    } else {
+      setSelectedSkills(selectedSkills.filter((item) => item !== skill));
+    }
+    form.setValue("skill", selectedSkills);
+  };
+
+  const handleInterestChange = (interest: string, isChecked: boolean) => {
+    if (isChecked) {
+      setSelectedInterests([...selectedInterests, interest]);
+    } else {
+      setSelectedInterests(
+        selectedInterests.filter((item) => item !== interest)
+      );
+    }
+    form.setValue("interest", selectedInterests);
+  };
+
+  const handleLearningResourceChange = (
+    resource: string,
+    isChecked: boolean
+  ) => {
+    if (isChecked) {
+      setSelectedLearningResources([...selectedLearningResources, resource]);
+    } else {
+      setSelectedLearningResources(
+        selectedLearningResources.filter((item) => item !== resource)
+      );
+    }
+    form.setValue("learningResource", selectedLearningResources);
+  };
+
+  const handleToolChange = (tool: string, isChecked: boolean) => {
+    if (isChecked) {
+      setSelectedTools([...selectedTools, tool]);
+    } else {
+      setSelectedTools(selectedTools.filter((item) => item !== tool));
+    }
+  };
+
   const submitHandler: SubmitHandler<IUser> = (data) => {
     data.profilePictureLink = imageLink;
+    data.interest = selectedInterests;
+    data.skill = selectedSkills;
+    data.learningResource = selectedLearningResources;
+    data.tools = selectedTools;
+
     const validationMessage = validateData(data);
     if (validationMessage != "") {
       toast.destructive(validationMessage);
@@ -89,7 +142,9 @@ function WelcomePage() {
           router.push("/pages/home");
         }
       });
-    } catch (error) {}
+    } catch (error: any) {
+      toast.destructive(error);
+    }
   };
 
   return (
@@ -167,7 +222,13 @@ function WelcomePage() {
               <Label className="text-lg font-semibold">Skills</Label>
               <div className="flex flex-wrap gap-2">
                 {interestType.map((skill, index) => (
-                  <WelcomeCheckbox label={skill} key={index} />
+                  <WelcomeCheckbox
+                    label={skill}
+                    key={index}
+                    onCheckedChange={(checked) =>
+                      handleSkillChange(skill, checked)
+                    }
+                  />
                 ))}
               </div>
             </Vertical>
@@ -175,15 +236,29 @@ function WelcomePage() {
               <Label className="text-lg font-semibold">Interests</Label>
               <div className="flex flex-wrap gap-2">
                 {interestType.map((interest, index) => (
-                  <WelcomeCheckbox label={interest} key={index} />
+                  <WelcomeCheckbox
+                    label={interest}
+                    key={index}
+                    onCheckedChange={(checked) =>
+                      handleInterestChange(interest, checked)
+                    }
+                  />
                 ))}
               </div>
             </Vertical>
             <Vertical>
-              <Label className="text-lg font-semibold">Learning Resources</Label>
+              <Label className="text-lg font-semibold">
+                Learning Resources
+              </Label>
               <div className="flex flex-wrap gap-2">
                 {learningResources.map((resource, index) => (
-                  <WelcomeCheckbox label={resource} key={index} />
+                  <WelcomeCheckbox
+                    label={resource}
+                    key={index}
+                    onCheckedChange={(checked) =>
+                      handleLearningResourceChange(resource, checked)
+                    }
+                  />
                 ))}
               </div>
             </Vertical>
@@ -191,7 +266,13 @@ function WelcomePage() {
               <Label className="text-lg font-semibold">Tools</Label>
               <div className="flex flex-wrap gap-2">
                 {toolTypes.map((tool, index) => (
-                  <WelcomeCheckbox label={tool} key={index} />
+                  <WelcomeCheckbox
+                    label={tool}
+                    key={index}
+                    onCheckedChange={(checked) =>
+                      handleToolChange(tool, checked)
+                    }
+                  />
                 ))}
               </div>
             </Vertical>
