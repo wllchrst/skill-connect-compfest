@@ -1,6 +1,5 @@
 import { useUserContext } from "@/app/contexts/user-context";
 import { IGroup } from "@/app/interfaces/group-interface";
-import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -11,14 +10,29 @@ import {
 } from "@/components/ui/dialog";
 import GroupTab from "./group-tab";
 import GroupInformation from "./group-information";
+import { Button } from "@/components/ui/button";
+import GroupService from "@/app/service/group-service";
+import ToastBuilder from "@/app/builder/toast-builder";
 
 interface I {
   group: IGroup;
 }
+
+const groupService = new GroupService();
 function GroupCard({ group }: I) {
   const { user } = useUserContext();
   const memberIds = group.members.map((value, index) => value.id);
+  const toast = new ToastBuilder("Join Group");
   const isInTheGroup = memberIds.includes(user.id);
+
+  function joinGroup() {
+    groupService
+      .addGroupMember({ groupId: group.id, userId: user.id })
+      .then((result) => {
+        if (result.data == false)
+          toast.destructive(`Something went wrong ${result.message}`);
+      });
+  }
 
   return (
     <>
@@ -48,6 +62,7 @@ function GroupCard({ group }: I) {
           ) : (
             <>
               <GroupInformation group={group} />
+              <Button onClick={() => joinGroup()}>Join Group</Button>
             </>
           )}
         </DialogContent>

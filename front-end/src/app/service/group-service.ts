@@ -48,6 +48,13 @@ export default class GroupService extends BackendService {
     }
   }
 
+  async getUserGroup(userId: string): Promise<IResponse<IGroup[]>> {
+    const userGroups = await this.get<IResponse<IGroup[]>>(
+      "group/user/" + userId
+    );
+    return userGroups.data;
+  }
+
   async addGroupMember(addGroupMember: IAddGroupMember) {
     const response = await this.post<IResponse<boolean>>(
       "group/member",

@@ -1,10 +1,14 @@
 "use client";
+import FriendRecommendation from "@/app/components/community/friend-recommendation";
+import GroupRecommendation from "@/app/components/community/group-recommendation";
 import HomeCourseRecommendation from "@/app/components/home/home-course-recommendation";
 import { useUserContext } from "@/app/contexts/user-context";
+import useGetGroupRecommendation from "@/app/hooks/use-get-group-recommendation";
 import MainPageLayout from "@/app/layout/main-page-layout";
 
 function HomePage() {
   const { user } = useUserContext();
+  const { isLoading, groups } = useGetGroupRecommendation();
 
   return (
     <MainPageLayout>
@@ -19,6 +23,14 @@ function HomePage() {
       </div>
 
       <HomeCourseRecommendation />
+      <div className="flex gap-3 p-3">
+        <div className="w-1/2">
+          <GroupRecommendation groups={groups} isLoading={isLoading} />
+        </div>
+        <div className="w-1/2">
+          <FriendRecommendation />
+        </div>
+      </div>
     </MainPageLayout>
   );
 }

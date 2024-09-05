@@ -1,12 +1,14 @@
 "use client";
-import useGetGroupRecommendation from "@/app/hooks/use-get-group-recommendation";
-import GroupService from "@/app/service/group-service";
 import Loading from "../loading";
 import GroupCard from "./group-card";
+import { IGroup } from "@/app/interfaces/group-interface";
 
-function GroupRecommendation() {
-  const { groups, isLoading } = useGetGroupRecommendation();
+interface I {
+  groups: IGroup[];
+  isLoading: boolean;
+}
 
+function GroupRecommendation({ groups, isLoading }: I) {
   if (isLoading) return <Loading />;
   return (
     <div>

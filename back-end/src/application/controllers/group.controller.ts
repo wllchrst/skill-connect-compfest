@@ -15,6 +15,20 @@ export class GroupController {
     return this.groupService.getAllGroup();
   }
 
+  @Get('user/:userId')
+  async getUserGroups(@Param() params: any): Promise<IResponse<GroupDTO[]>> {
+    const userId = params.userId;
+
+    if (userId == undefined || userId == null)
+      return Helper.createResponse(
+        [],
+        'User id cannot be null or undefined',
+        false,
+      );
+
+    return await this.groupService.getUserGroup(userId);
+  }
+
   @Get('recommendation/:userId')
   async getGroupRecommendation(
     @Param() params: any,

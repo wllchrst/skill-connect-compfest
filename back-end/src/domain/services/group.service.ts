@@ -18,6 +18,8 @@ export class GroupService {
 
   async getGroupRecommendation(userId: string): Promise<IResponse<GroupDTO[]>> {
     const userExists = await this.userRepository.userExists(userId);
+    const userGroups = await this.groupRepository.getUserGroup(userId);
+    const userGroupId = userGroups.map((group, index) => group.id);
 
     if (!userExists) {
       const message = `User with the id ${userId} does not exists`;
@@ -58,7 +60,11 @@ export class GroupService {
         });
       }
 
-      return Helper.createResponse(returnGroups, 'Recommended Groups', true);
+      return Helper.createResponse(
+        returnGroups.filter((group, index) => !userGroupId.includes(group.id)),
+        'Recommended Groups',
+        true,
+      );
     }
 
     const returnGroups: GroupDTO[] = [];
@@ -73,7 +79,17 @@ export class GroupService {
       });
     }
 
-    return Helper.createResponse(returnGroups, 'Recommended Groups', true);
+    return Helper.createResponse(
+      returnGroups.filter((group, index) => !userGroupId.includes(group.id)),
+      'Recommended Groups',
+      true,
+    );
+  }
+
+  async getUserGroup(userId: string): Promise<IResponse<GroupDTO[]>> {
+    const groups = await this.groupRepository.getUserGroup(userId);
+
+    return Helper.createResponse(groups, 'User Groups', true);
   }
 
   async getAllGroup(): Promise<IResponse<Group[]>> {

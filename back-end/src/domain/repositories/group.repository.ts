@@ -25,6 +25,30 @@ export class GroupRepository {
     }
   }
 
+  async getUserGroup(userId: string): Promise<GroupDTO[]> {
+    const groups = await this.databaseService.group.findMany({
+      where: {
+        members: {
+          some: { userId: userId },
+        },
+      },
+    });
+
+    const returnGroup: GroupDTO[] = [];
+
+    for (const group of groups) {
+      returnGroup.push({
+        id: group.id,
+        groupName: group.groupName,
+        createdAt: group.createdAt,
+        description: group.description,
+        members: await this.getGroupMember(group.id),
+      });
+    }
+
+    return returnGroup;
+  }
+
   async getGroupRecommendation(userId: string): Promise<Group[]> {
     const userIds =
       await this.modelRepository.getFriendRecommendationList(userId);

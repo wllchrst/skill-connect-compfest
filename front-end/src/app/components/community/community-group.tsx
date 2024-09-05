@@ -1,7 +1,11 @@
+"use client";
+import useGetGroupRecommendation from "@/app/hooks/use-get-group-recommendation";
 import { CreateGroup } from "./create-group";
 import GroupRecommendation from "./group-recommendation";
+import UserGroup from "./user-group";
 
 function CommunityGroup() {
+  const { groups, isLoading, userGroups } = useGetGroupRecommendation();
   return (
     <>
       <div className="flex gap-2 mt-5 flex-col">
@@ -13,7 +17,8 @@ function CommunityGroup() {
         </div>
 
         <div></div>
-        <GroupRecommendation />
+        <GroupRecommendation groups={groups} isLoading={isLoading} />
+        <UserGroup groups={userGroups} />
       </div>
     </>
   );
