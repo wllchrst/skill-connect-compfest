@@ -11,7 +11,7 @@ interface I {
 function GroupRecommendation({ groups, isLoading }: I) {
   if (isLoading) return <Loading />;
   return (
-    <div>
+    <div className="">
       <blockquote className="border-l-2 pl-6 italic mb-4">
         Group Recommendation
       </blockquote>

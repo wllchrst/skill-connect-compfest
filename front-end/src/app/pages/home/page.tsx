@@ -23,13 +23,11 @@ function HomePage() {
       </div>
 
       <HomeCourseRecommendation />
-      <div className="flex gap-3 p-3">
-        <div className="w-1/2">
-          <GroupRecommendation groups={groups} isLoading={isLoading} />
-        </div>
-        <div className="w-1/2">
-          <FriendRecommendation />
-        </div>
+      <div className="p-4">
+        <GroupRecommendation groups={groups} isLoading={isLoading} />
+      </div>
+      <div className="p-4">
+        <FriendRecommendation />
       </div>
     </MainPageLayout>
   );

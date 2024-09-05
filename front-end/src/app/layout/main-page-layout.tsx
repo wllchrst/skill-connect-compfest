@@ -3,17 +3,17 @@
 import { IChildren } from "@/app/interfaces/children-interface";
 import Navbar from "@/app/components/navbar/navbar";
 import useGetUserInformation from "../hooks/use-get-user-information";
-import Loading from "../components/loading";
 import { useUserContext } from "../contexts/user-context";
 import { useRouter } from "next/navigation";
 import UserMiddleware from "../middleware/user-middleware";
+import LoadingPage from "../components/loading-page";
 
 function MainPageLayout({ children }: IChildren) {
   const { user } = useUserContext();
   const { isLoading } = useGetUserInformation();
   const router = useRouter();
 
-  if (isLoading) return <Loading />;
+  if (isLoading) return <LoadingPage />;
   else if (user == null) router.push("/pages/login");
   else if (!user.filledInformation) router.push("/pages/welcome");
 
