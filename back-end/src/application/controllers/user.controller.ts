@@ -40,13 +40,13 @@ export class UserController {
     if (userPayload == undefined || userPayload == null)
       return Helper.createResponse(null, 'Something went wrong', false);
 
-    var { data } = await this.userService.getUserById(userPayload.id);
+    const { data } = await this.userService.getUserById(userPayload.id);
     if (data == null)
       return Helper.createResponse(null, 'User was not found', false);
 
     const friends = await this.userService.getUserFriends(data.id);
 
-    const friendData: UserDTO[] = friends.data.map((data, index) => {
+    const friendData: UserDTO[] = friends.data.map((data) => {
       const dto: UserDTO = {
         id: data.id,
         currentEducation: data.currentEducation,
@@ -136,30 +136,38 @@ export class UserController {
     return await this.userService.getUserRecommendation(userId);
   }
 
+  @UseGuards(AuthGuard)
   @Patch()
   async updateUserInformation(
+    @Request() req,
     @Body() updateUserDTO: UpdateUserDTO,
   ): Promise<IResponse<boolean>> {
-    const validationResult = this.validateUpdateUserDTO(updateUserDTO);
+    const userPayload = req.userPayload;
+    const validationResult = this.validateUpdateUserDTO(
+      updateUserDTO,
+      userPayload,
+    );
     if (validationResult != '')
       return Helper.createResponse(false, validationResult, false);
 
     return this.userService.updateUserData(updateUserDTO);
   }
 
-  validateUpdateUserDTO(data: UpdateUserDTO): string {
+  validateUpdateUserDTO(
+    data: UpdateUserDTO,
+    userPayload: IUserPayload,
+  ): string {
     const errors: string[] = [];
 
-    if (typeof data.id !== 'string' || data.id.trim() === '') {
+    if (typeof userPayload.id !== 'string' || userPayload.id.trim() === '') {
       errors.push("Invalid or missing 'id'.");
     }
 
-    if (typeof data.name !== 'string' || data.name.trim() === '') {
-      errors.push("Invalid or missing 'name'.");
-    }
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (typeof data.email !== 'string' || !emailRegex.test(data.email)) {
+    if (
+      typeof userPayload.email !== 'string' ||
+      !emailRegex.test(userPayload.email)
+    ) {
       errors.push("Invalid or missing 'email'.");
     }
 
@@ -177,10 +185,7 @@ export class UserController {
       errors.push("Invalid or missing 'description'.");
     }
 
-    if (
-      !(data.dateOfBirth instanceof Date) ||
-      isNaN(data.dateOfBirth.getTime())
-    ) {
+    if (data.dateOfBirth === undefined || data.dateOfBirth === null) {
       errors.push("Invalid or missing 'dateOfBirth'.");
     }
 

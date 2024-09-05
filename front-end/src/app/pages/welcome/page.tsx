@@ -39,9 +39,10 @@ import { cn } from "@/lib/utils";
 import { SelectValue } from "@radix-ui/react-select";
 import { formToJSON } from "axios";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { lazy, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Vertical from "../../components/welcome/vertical";
+import useGetUserInformation from "@/app/hooks/use-get-user-information";
 
 function validateData(user: IUser): string {
   if (
@@ -49,6 +50,8 @@ function validateData(user: IUser): string {
     user.dateOfBirth == null ||
     user.profilePictureLink == "" ||
     user.language == "" ||
+    user.currentEducation == "" ||
+    user.experienceYears <= 0 ||
     user.skill.length == 0 ||
     user.interest.length == 0 ||
     user.learningResource.length == 0 ||
@@ -78,7 +81,7 @@ function WelcomePage() {
   const toast = new ToastBuilder("Welcome Page");
   const router = useRouter();
 
-  // if (user.filledInformation) router.push("/pages/home");
+  if (user.filledInformation) router.push("/pages/home");
 
   const handleSkillChange = (skill: string, isChecked: boolean) => {
     if (isChecked) {
@@ -122,12 +125,24 @@ function WelcomePage() {
     }
   };
 
+  const handleLanguageChange = (language: string) => {
+    form.setValue("language", language);
+  };
+
+  const handleEducationChange = (education: string) => {
+    form.setValue("currentEducation", education);
+  };
+
   const submitHandler: SubmitHandler<IUser> = (data) => {
+    data.email = user.email;
+    data.id = user.id;
+    data.name = user.name;
     data.profilePictureLink = imageLink;
     data.interest = selectedInterests;
     data.skill = selectedSkills;
     data.learningResource = selectedLearningResources;
     data.tools = selectedTools;
+    data.experienceYears = parseInt(data.experienceYears.toString());
 
     const validationMessage = validateData(data);
     if (validationMessage != "") {
@@ -140,9 +155,14 @@ function WelcomePage() {
         if (result.success) {
           toast.normal("Information updated successfully");
           router.push("/pages/home");
+        } else {
+          toast.destructive(result.message);
         }
       });
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+      toast.destructive(`Something went wrong: ${error}`);
+    }
   };
 
   return (
@@ -176,7 +196,7 @@ function WelcomePage() {
               type="date"
               {...register("dateOfBirth")}
             />
-            <Select {...register("language")}>
+            <Select onValueChange={(value) => handleLanguageChange(value)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select a language.." />
               </SelectTrigger>
@@ -191,7 +211,7 @@ function WelcomePage() {
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <Select {...register("currentEducation")}>
+            <Select onValueChange={(value) => handleEducationChange(value)}>
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Select current education.." />
               </SelectTrigger>
@@ -206,7 +226,11 @@ function WelcomePage() {
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <Input placeholder="Experience in year(s)" type="number" />
+            <Input
+              {...register("experienceYears")}
+              placeholder="Experience in year(s)"
+              type="number"
+            />
             <Button type="button" onClick={() => setComponentState("second")}>
               Next
             </Button>

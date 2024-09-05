@@ -121,36 +121,40 @@ export class UserService {
   async updateUserData(
     updateUserDTO: UpdateUserDTO,
   ): Promise<IResponse<boolean>> {
-    const userExists = await this.userRepository.userExists(updateUserDTO.id);
-    if (!userExists)
-      return Helper.createResponse(false, 'User was not found', false);
+    try {
+      const userExists = await this.userRepository.userExists(updateUserDTO.id);
+      if (!userExists)
+        return Helper.createResponse(false, 'User was not found', false);
 
-    const updateResult = await this.userRepository.updateUserData(
-      {
-        id: updateUserDTO.id,
-        email: updateUserDTO.email,
-        name: updateUserDTO.name,
-        skill: updateUserDTO.skill.join(';'),
-        tools: updateUserDTO.tools.join(';'),
-        language: updateUserDTO.language,
-        interest: updateUserDTO.interest.join(';'),
-        description: updateUserDTO.description,
-        experienceYears: updateUserDTO.experienceYears,
-        learningResource: updateUserDTO.learningResource.join(';'),
-        profilePicture: updateUserDTO.profilePictureLink,
-        currentEducation: updateUserDTO.currentEducation,
-        dateOfBirth: updateUserDTO.dateOfBirth,
-        filledInformation: updateUserDTO.filledInformation,
-      },
-      updateUserDTO.id,
-    );
+      const updateResult = await this.userRepository.updateUserData(
+        {
+          id: updateUserDTO.id,
+          email: updateUserDTO.email,
+          name: updateUserDTO.name,
+          skill: updateUserDTO.skill.join(';'),
+          tools: updateUserDTO.tools.join(';'),
+          language: updateUserDTO.language,
+          interest: updateUserDTO.interest.join(';'),
+          description: updateUserDTO.description,
+          experienceYears: updateUserDTO.experienceYears,
+          learningResource: updateUserDTO.learningResource.join(';'),
+          profilePicture: updateUserDTO.profilePictureLink,
+          currentEducation: updateUserDTO.currentEducation,
+          dateOfBirth: new Date(updateUserDTO.dateOfBirth).toISOString(),
+          filledInformation: true,
+        },
+        updateUserDTO.id,
+      );
 
-    const message = updateResult
-      ? 'Updating user success'
-      : 'Something went wrong while updating user';
+      const message = updateResult
+        ? 'Updating user success'
+        : 'Something went wrong while updating user';
 
-    await this.trainFriendRecommendation();
+      await this.trainFriendRecommendation();
 
-    return Helper.createResponse(updateResult, message, updateResult);
+      return Helper.createResponse(updateResult, message, updateResult);
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
