@@ -82,10 +82,11 @@ function WelcomePage() {
   const router = useRouter();
 
   useEffect(() => {
-    console.log(user);
+    const currUser = user as IUser;
+    if (currUser) {
+      if (user.filledInformation) router.push("/pages/home");
+    }
   }, [user]);
-
-  // if (user.filledInformation) router.push("/pages/home");
 
   const handleSkillChange = (skill: string, isChecked: boolean) => {
     if (isChecked) {
