@@ -22,12 +22,14 @@ import {
 } from "@/components/ui/dialog";
 import UserProfile from "./user-profile";
 import FriendProfile from "./friend-profile";
+import { useRealtimeContext } from "@/app/contexts/realtime-context";
 
 const userService = new UserService();
 
 export function FriendCard({ friend, isFriend }: I) {
   const { user } = useUserContext();
   const toast = new ToastBuilder("Adding Friend");
+  const { change } = useRealtimeContext();
 
   if (user == undefined) return <></>;
 
@@ -42,7 +44,10 @@ export function FriendCard({ friend, isFriend }: I) {
 
     if (!response.success)
       toast.destructive("Something went wrong, please try again later!");
-    else toast.normal("Adding friend success!");
+    else {
+      toast.normal("Adding friend success!");
+      change();
+    }
   }
 
   return (
