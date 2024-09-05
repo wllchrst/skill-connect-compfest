@@ -3,8 +3,10 @@ import { useUserContext } from "../contexts/user-context";
 import ToastBuilder from "../builder/toast-builder";
 import { IGroup } from "../interfaces/group-interface";
 import GroupService from "../service/group-service";
+import { useRealtimeContext } from "../contexts/realtime-context";
 
 function useGetGroupRecommendation() {
+  const { c } = useRealtimeContext();
   const groupService = new GroupService();
   const [groups, setGroups] = useState<IGroup[]>([]);
   const [userGroups, setUserGroups] = useState<IGroup[]>([]);
@@ -41,7 +43,7 @@ function useGetGroupRecommendation() {
       fetchGroupRecommendation();
       fetchUserGroup();
     }
-  }, [user]);
+  }, [user, c]);
 
   return { groups, isLoading, userGroups };
 }

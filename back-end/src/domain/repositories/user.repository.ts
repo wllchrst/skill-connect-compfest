@@ -24,15 +24,26 @@ export class UserRepository {
     try {
       const userFriendsData = await this.databaseService.friend.findMany({
         where: {
-          userId: userId,
+          OR: [
+            {
+              userId: userId,
+            },
+            {
+              friendId: userId,
+            },
+          ],
         },
       });
 
       const friendIds = userFriendsData.map((f) => f.friendId);
 
+      const userIds = friendIds
+        .concat(userFriendsData.map((f) => f.userId))
+        .filter((f, index) => f != userId);
+
       const userFriends = await this.databaseService.user.findMany({
         where: {
-          AND: [{ id: { in: friendIds } }, { id: { not: userId } }],
+          AND: [{ id: { in: userIds } }, { id: { not: userId } }],
         },
       });
 

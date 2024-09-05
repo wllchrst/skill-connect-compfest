@@ -13,6 +13,7 @@ import GroupInformation from "./group-information";
 import { Button } from "@/components/ui/button";
 import GroupService from "@/app/service/group-service";
 import ToastBuilder from "@/app/builder/toast-builder";
+import { useRealtimeContext } from "@/app/contexts/realtime-context";
 
 interface I {
   group: IGroup;
@@ -20,6 +21,7 @@ interface I {
 
 const groupService = new GroupService();
 function GroupCard({ group }: I) {
+  const { change } = useRealtimeContext();
   const { user } = useUserContext();
   const memberIds = group.members.map((value, index) => value.id);
   const toast = new ToastBuilder("Join Group");
@@ -31,6 +33,7 @@ function GroupCard({ group }: I) {
       .then((result) => {
         if (result.data == false)
           toast.destructive(`Something went wrong ${result.message}`);
+        else change();
       });
   }
 

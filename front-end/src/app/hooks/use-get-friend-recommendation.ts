@@ -3,10 +3,12 @@ import { IUser } from "../interfaces/user-interface";
 import UserService from "../service/user-service";
 import { useUserContext } from "../contexts/user-context";
 import ToastBuilder from "../builder/toast-builder";
+import { useRealtimeContext } from "../contexts/realtime-context";
 
 const userService = new UserService();
 
 function useGetFriendRecommendation() {
+  const { c } = useRealtimeContext();
   const [userRecommendation, setUserRecommendation] = useState<IUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useUserContext();
@@ -33,7 +35,7 @@ function useGetFriendRecommendation() {
 
   useEffect(() => {
     fetchFriendRecommendation();
-  }, []);
+  }, [c]);
 
   return { userRecommendation, isLoading };
 }

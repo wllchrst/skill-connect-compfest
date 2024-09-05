@@ -3,15 +3,17 @@ import Cookies from "js-cookie";
 import { userTokenKey } from "../data/web-contant";
 import UserService from "../service/user-service";
 import { useUserContext } from "../contexts/user-context";
+import { useRealtimeContext } from "../contexts/realtime-context";
 
 export default function useGetUserInformation() {
   const { setUser, user } = useUserContext();
   const [isLoading, setIsLoading] = useState(true);
   const userService = UserService.getInstance();
+  const { c } = useRealtimeContext();
   const userToken = Cookies.get(userTokenKey);
 
   async function fetchUserInformation() {
-    console.log("getting user information")
+    console.log("getting user information");
     if (userToken == undefined || userToken == null) {
       setIsLoading(false);
       return;
@@ -30,7 +32,7 @@ export default function useGetUserInformation() {
 
   useEffect(() => {
     fetchUserInformation();
-  }, []);
+  }, [c]);
 
   return { isLoading, user };
 }
