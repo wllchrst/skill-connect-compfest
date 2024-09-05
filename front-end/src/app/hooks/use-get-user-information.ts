@@ -13,15 +13,12 @@ export default function useGetUserInformation() {
   const userToken = Cookies.get(userTokenKey);
 
   async function fetchUserInformation() {
-    console.log("getting user information");
     if (userToken == undefined || userToken == null) {
       setIsLoading(false);
       return;
     }
 
     const response = await userService.getUserInformation(userToken);
-
-    console.log(response.data);
 
     if (response.data != null) {
       setUser(response.data);

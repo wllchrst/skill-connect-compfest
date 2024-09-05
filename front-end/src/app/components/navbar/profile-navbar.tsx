@@ -32,7 +32,7 @@ function ProfileNavbar() {
       onMouseEnter={() => setDivHovering(true)}
       onMouseLeave={() => setDivHovering(false)}
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 overflow-hidden">
         <Avatar className="flex-shrink-0">
           <AvatarImage src={user.profilePictureLink} alt={user.name} />
           <AvatarFallback>{getFirstTwoInitials(user.name)}</AvatarFallback>

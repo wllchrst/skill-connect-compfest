@@ -2,6 +2,7 @@
 import FriendCard from "@/app/components/community/friend-card";
 import { useUserContext } from "@/app/contexts/user-context";
 import { getFirstTwoInitials } from "@/app/helpers/helper";
+import { IUser } from "@/app/interfaces/user-interface";
 import MainPageLayout from "@/app/layout/main-page-layout";
 import { AvatarFallback } from "@/components/ui/avatar";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
@@ -33,7 +34,7 @@ function Profile() {
             <div className="mb-6">
               <h2 className="text-xl font-semibold mb-2">Skills</h2>
               <ul className="list-disc list-inside text-gray-400">
-                {user.skill.map((skill, index) => (
+                {user.skill.map((skill: string, index: number) => (
                   <li key={index}>{skill}</li>
                 ))}
               </ul>
@@ -49,7 +50,7 @@ function Profile() {
             <div className="mb-6">
               <h2 className="text-xl font-semibold mb-2">Interests</h2>
               <ul className="list-disc list-inside text-gray-400">
-                {user.interest.map((interest, index) => (
+                {user.interest.map((interest: string, index: number) => (
                   <li key={index}>{interest}</li>
                 ))}
               </ul>
@@ -57,15 +58,17 @@ function Profile() {
             <div className="mb-6">
               <h2 className="text-xl font-semibold mb-2">Learning Resources</h2>
               <ul className="list-disc list-inside text-gray-400">
-                {user.learningResource.map((resource, index) => (
-                  <li key={index}>{resource}</li>
-                ))}
+                {user.learningResource.map(
+                  (resource: string, index: number) => (
+                    <li key={index}>{resource}</li>
+                  )
+                )}
               </ul>
             </div>
             <div className="mb-6">
               <h2 className="text-xl font-semibold mb-2">Tools</h2>
               <ul className="list-disc list-inside text-gray-400">
-                {user.tools.map((tool, index) => (
+                {user.tools.map((tool: string, index: number) => (
                   <li key={index}>{tool}</li>
                 ))}
               </ul>
@@ -74,7 +77,7 @@ function Profile() {
               <div>
                 <h2 className="text-xl font-semibold mb-2">Friends</h2>
                 <div className="flex flex-wrap gap-2">
-                  {user.friends.map((friend) => (
+                  {user.friends.map((friend: IUser) => (
                     <FriendCard friend={friend} isFriend={true} />
                   ))}
                 </div>

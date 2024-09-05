@@ -39,7 +39,7 @@ import { cn } from "@/lib/utils";
 import { SelectValue } from "@radix-ui/react-select";
 import { formToJSON } from "axios";
 import { useRouter } from "next/navigation";
-import { lazy, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Vertical from "../../components/welcome/vertical";
 import useGetUserInformation from "@/app/hooks/use-get-user-information";
@@ -81,7 +81,11 @@ function WelcomePage() {
   const toast = new ToastBuilder("Welcome Page");
   const router = useRouter();
 
-  if (user.filledInformation) router.push("/pages/home");
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
+  // if (user.filledInformation) router.push("/pages/home");
 
   const handleSkillChange = (skill: string, isChecked: boolean) => {
     if (isChecked) {
