@@ -81,12 +81,12 @@ function WelcomePage() {
   const toast = new ToastBuilder("Welcome Page");
   const router = useRouter();
 
-  useEffect(() => {
-    const currUser = user as IUser;
-    if (currUser) {
-      if (user.filledInformation) router.push("/pages/home");
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   const currUser = user as IUser;
+  //   if (currUser) {
+  //     if (user.filledInformation) router.push("/pages/home");
+  //   }
+  // }, [user]);
 
   const handleSkillChange = (skill: string, isChecked: boolean) => {
     if (isChecked) {
