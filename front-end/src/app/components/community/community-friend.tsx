@@ -2,6 +2,7 @@
 import FriendCard from "./friend-card";
 import { useUserContext } from "@/app/contexts/user-context";
 import FriendRecommendation from "./friend-recommendation";
+import { IUser } from "@/app/interfaces/user-interface";
 
 function CommunityFriend() {
   const { user } = useUserContext();
@@ -17,7 +18,7 @@ function CommunityFriend() {
             Contact your friends
           </blockquote>
           <div className="flex gap-2 mt-2 items-center overflow-y-auto scrollbar-thin scrollbar-thumb-white scrollbar-track-transparent pb-2">
-            {user.friends.map((value, index) => (
+            {user.friends.map((value: IUser, index: number) => (
               <FriendCard friend={value} key={index} isFriend={true} />
             ))}
           </div>
