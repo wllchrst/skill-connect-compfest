@@ -142,9 +142,7 @@ function WelcomePage() {
           router.push("/pages/home");
         }
       });
-    } catch (error: any) {
-      toast.destructive(error);
-    }
+    } catch (error) {}
   };
 
   return (
