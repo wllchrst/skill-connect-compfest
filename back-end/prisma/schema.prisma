@@ -18,7 +18,7 @@ model User {
   name              String
   email             String    @unique
   password          String
-  profilePicture    String    @default("")
+  profilePicture    String    @default("") @db.VarChar(500)
   description       String    @default("")
   dateOfBirth       DateTime?
   language          String    @default("")
