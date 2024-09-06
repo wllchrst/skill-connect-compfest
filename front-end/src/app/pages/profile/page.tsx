@@ -1,10 +1,13 @@
 "use client";
 import FriendCard from "@/app/components/community/friend-card";
+import Vertical from "@/app/components/welcome/vertical";
 import { useUserContext } from "@/app/contexts/user-context";
 import { getFirstTwoInitials } from "@/app/helpers/helper";
+import { IUser } from "@/app/interfaces/user-interface";
 import MainPageLayout from "@/app/layout/main-page-layout";
 import { AvatarFallback } from "@/components/ui/avatar";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
+import { Label } from "@radix-ui/react-label";
 
 function Profile() {
   const { user } = useUserContext();
@@ -12,74 +15,124 @@ function Profile() {
   return (
     <MainPageLayout>
       {user != null && (
-        <div className="min-h-screen">
-          <div className="max-w-4xl p-6 rounded-lg shadow-lg">
-            <div className="flex items-center mb-6">
-              <Avatar className="flex-shrink-0 w-32 h-32">
-                <AvatarImage src={user.profilePictureLink} alt={user.name} />
-                <AvatarFallback className="text-lg">
-                  {getFirstTwoInitials(user.name)}
-                </AvatarFallback>
-              </Avatar>
-              <div className="ml-6">
-                <h1 className="text-3xl font-bold mb-2">{user.name}</h1>
-                <p className="text-lg text-gray-400 mb-2">{user.email}</p>
-                <p className="text-sm text-gray-500">
-                  {new Date(user.dateOfBirth).toDateString()}
-                </p>
+        <div className="w-full h-full flex gap-3 items-start justify-around p-16">
+          <div className="flex-shrink-0 w-60 h-60 overflow-hidden rounded-full m-8">
+            <Avatar>
+              <AvatarImage
+                src={user.profilePictureLink}
+                alt={user.name}
+                className="object-cover w-full h-full"
+              />
+              <AvatarFallback>{getFirstTwoInitials(user.name)}</AvatarFallback>
+            </Avatar>
+          </div>
+          <div className="flex justify-center items-start w-full h-fit rounded-md border border-neutral-500 p-8 m-8">
+            <div className="flex flex-col gap-3 w-full">
+              <div className="flex flex-col gap-1">
+                <Label className="text-lg font-semibold">Username</Label>
+                <Label className="text-md font-normal">{user.name}</Label>
+              </div>
+              <div className="flex flex-col gap-1">
+                <Label className="text-lg font-semibold">Description</Label>
+                <Label className="text-md font-normal">
+                  {user.description}
+                </Label>
+              </div>
+              <div className="flex flex-col gap-1">
+                <Label className="text-lg font-semibold">Skills</Label>
+                <ul className="flex flex-wrap gap-2 list-disc">
+                  {user.skill.map((skill: string, index: number) => (
+                    <li key={index} className="ml-6">
+                      {skill}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="flex flex-col gap-1">
+                <Label className="text-lg font-semibold">Language</Label>
+                <Label className="text-md font-normal">{user.language}</Label>
+              </div>
+              <div className="flex flex-col gap-1">
+                <Label className="text-lg font-semibold">Experience</Label>
+                <Label className="text-md font-normal">
+                  {user.experienceYears > 1
+                    ? `${user.experienceYears} years`
+                    : `${user.experienceYears} year`}
+                </Label>
+              </div>
+              <div className="flex flex-col gap-1">
+                <Label className="text-lg font-semibold">
+                  Current Education
+                </Label>
+                <Label className="text-md font-normal">
+                  {user.currentEducation}
+                </Label>
               </div>
             </div>
-            <p className="mb-4 text-gray-300">{user.description}</p>
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold mb-2">Skills</h2>
-              <ul className="list-disc list-inside text-gray-400">
-                {user.skill.map((skill, index) => (
-                  <li key={index}>{skill}</li>
-                ))}
-              </ul>
-            </div>
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold mb-2">Education</h2>
-              <p className="text-gray-400">{user.currentEducation}</p>
-            </div>
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold mb-2">Experience</h2>
-              <p className="text-gray-400">{user.experienceYears} years</p>
-            </div>
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold mb-2">Interests</h2>
-              <ul className="list-disc list-inside text-gray-400">
-                {user.interest.map((interest, index) => (
-                  <li key={index}>{interest}</li>
-                ))}
-              </ul>
-            </div>
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold mb-2">Learning Resources</h2>
-              <ul className="list-disc list-inside text-gray-400">
-                {user.learningResource.map((resource, index) => (
-                  <li key={index}>{resource}</li>
-                ))}
-              </ul>
-            </div>
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold mb-2">Tools</h2>
-              <ul className="list-disc list-inside text-gray-400">
-                {user.tools.map((tool, index) => (
-                  <li key={index}>{tool}</li>
-                ))}
-              </ul>
-            </div>
-            {user.filledInformation && (
-              <div>
-                <h2 className="text-xl font-semibold mb-2">Friends</h2>
-                <div className="flex flex-wrap gap-2">
-                  {user.friends.map((friend) => (
-                    <FriendCard friend={friend} isFriend={true} />
+            <div className="flex flex-col gap-3 w-full">
+              <div className="flex flex-col gap-1">
+                <Label className="text-lg font-semibold">Email</Label>
+                <Label className="text-md font-normal">{user.email}</Label>
+              </div>
+              <div className="flex flex-col gap-1">
+                <Label className="text-lg font-semibold">Date of Birth</Label>
+                <Label className="text-md font-normal">
+                  {new Date(user.dateOfBirth).toLocaleDateString()}
+                </Label>
+              </div>
+              <div className="flex flex-col gap-1">
+                <Label className="text-lg font-semibold">Interests</Label>
+                <ul className="flex flex-wrap gap-2 list-disc">
+                  {user.interest.map((interest: string, index: number) => (
+                    <li key={index} className="ml-6">
+                      {interest}
+                    </li>
                   ))}
+                </ul>
+              </div>
+              <div className="flex flex-col gap-1">
+                <Label className="text-lg font-semibold">Friends</Label>
+                <div className="flex gap-2">
+                  {user.friends.length == 0 ? (
+                    <Label className="text-md font-normal">
+                      No friends yet..
+                    </Label>
+                  ) : (
+                    user.friends.map((friend: IUser) => (
+                      <FriendCard
+                        key={friend.id}
+                        friend={friend}
+                        isFriend={true}
+                      />
+                    ))
+                  )}
                 </div>
               </div>
-            )}
+              <div className="flex flex-col gap-1">
+                <Label className="text-lg font-semibold">
+                  Learning Resources
+                </Label>
+                <ul className="flex flex-wrap gap-2 list-disc">
+                  {user.learningResource.map(
+                    (resource: string, index: number) => (
+                      <li key={index} className="ml-6">
+                        {resource}
+                      </li>
+                    )
+                  )}
+                </ul>
+              </div>
+              <div className="flex flex-col gap-1">
+                <Label className="text-lg font-semibold">Tools</Label>
+                <ul className="flex flex-wrap gap-2 list-disc">
+                  {user.tools.map((tool: string, index: number) => (
+                    <li key={index} className="ml-6">
+                      {tool}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       )}
